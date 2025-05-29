@@ -1,0 +1,18 @@
+{
+    "DELETE_TMP_INTERVAL": 120,
+    "IMG_EXPIRE": 120,
+    "VOICE_EXPIRE": 120,
+    "MESSAGE_QUEUE": {
+        "enable": true,
+        "interval": 2.0
+    },
+    "WHITELIST": {
+        "enable": false,
+        "users": [],
+        "chatrooms": []
+    },
+    "REDIS_HOST": "127.0.0.1",
+    "REDIS_PORT": 6379,
+    "REDIS_PASSWORD": "",
+    "REDIS_DB": 0
+}
