@@ -75,7 +75,7 @@ class LoginMixIn(BaseMixIn):
         if not self.device_name:
             self.device_name = create_device_name()
         if not self.device_id:
-            self.device_id = create_device_id
+            self.device_id = create_device_id()
         param = {
             'DeviceName': self.device_name,
             'DeviceID': self.device_id
