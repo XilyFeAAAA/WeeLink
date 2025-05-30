@@ -1,6 +1,6 @@
 from src.utils import post, logger
 from src.mixin.base import BaseMixIn
-from src.message.queue import MessageQueue
+from src.event.queue import MessageQueue
 from .constants import URL
 
 queue = MessageQueue.get_instance()
@@ -11,7 +11,7 @@ class MessageMixIn(BaseMixIn):
     # @BaseMixIn.require_login
     async def sync_message(self):
         param = {
-            "Wxid": self.wxid,
+            "Wxid": self.status.wxid,
             "Scene": 0,
             "Synckey": ""
         }
@@ -32,7 +32,7 @@ class MessageMixIn(BaseMixIn):
             "Content": content,
             "At": at,
             "Type": type_,
-            "Wxid": self.wxid
+            "Wxid": self.status.wxid
         }
         resp = await post(f"{URL}/Msg/SendTxt", body=param)
         if resp.get("Success"):
@@ -45,7 +45,7 @@ class MessageMixIn(BaseMixIn):
         param = {
             "ToWxid": to_wxid,
             "Base64": base64,
-            "Wxid": self.wxid
+            "Wxid": self.status.wxid
         }
         resp = await post(f"{URL}/Msg/UploadImg", body=param)
         if resp.get("Success"):
@@ -60,7 +60,7 @@ class MessageMixIn(BaseMixIn):
     #         "Base64": base64,
     #         "Type": type_,
     #         "VoiceTime": voice_time,
-    #         "Wxid": self.wxid
+    #         "Wxid": self.status.wxid
     #     }
     #     resp = await post(f"{URL}/Msg/SendVoice", body=param)
     #     if resp.get("Success"):
@@ -75,7 +75,7 @@ class MessageMixIn(BaseMixIn):
     #         "Base64": base64,
     #         "ImageBase64": image_base64,
     #         "PlayLength": play_length,
-    #         "Wxid": self.wxid
+    #         "Wxid": self.status.wxid
     #     }
     #     resp = await post(f"{URL}/Msg/SendVideo", body=param)
     #     if resp.get("Success"):
@@ -90,7 +90,7 @@ class MessageMixIn(BaseMixIn):
     #         "CardWxId": card_wxid,
     #         "CardNickName": card_nickname,
     #         "CardAlias": card_alias,
-    #         "Wxid": self.wxid
+    #         "Wxid": self.status.wxid
     #     }
     #     resp = await post(f"{URL}/Msg/ShareCard", body=param)
     #     if resp.get("Success"):
@@ -109,7 +109,7 @@ class MessageMixIn(BaseMixIn):
             "Desc": desc,
             "Url": url,
             "ThumbUrl": thumb_url,
-            "Wxid": self.wxid
+            "Wxid": self.status.wxid
         }
         resp = await post(f"{URL}/Msg/ShareLink", body=param)
         logger.debug(resp)
@@ -125,7 +125,7 @@ class MessageMixIn(BaseMixIn):
             "CreateTime": create_time,
             "NewMsgId": new_msg_id,
             "ToUserName": to_user_name,
-            "Wxid": self.wxid
+            "Wxid": self.status.wxid
         }
         resp = await post(f"{URL}/Msg/Revoke", body=param)
         if resp.get("Success"):
@@ -142,7 +142,7 @@ class MessageMixIn(BaseMixIn):
     async def _send_app_message(self, to_wxid: str, xml: str, type: int) -> tuple[int, int, int]:
         """发送app消息"""
         param = {
-            "Wxid": self.wxid, 
+            "Wxid": self.status.wxid, 
             "ToWxid": to_wxid, 
             "Xml": xml, 
             "Type": type

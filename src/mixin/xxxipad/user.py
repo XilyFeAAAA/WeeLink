@@ -7,13 +7,8 @@ class UserMixIn(BaseMixIn):
     
     async def get_profile(self) -> dict:
         param = {
-             "wxid": self.wxid
+             "wxid": self.status.wxid
         }
         resp = await post(f'{URL}/User/GetContractProfile', query=param)        
         logger.debug(resp)
-        if resp.get("Success"):
-            return resp.get("Data").get("userInfo")
-        else:
-            self.error_handler(resp)
-
-    
+        return resp.get("Data").get("userInfo") if resp.get("Success") else None

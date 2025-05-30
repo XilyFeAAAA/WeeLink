@@ -9,7 +9,7 @@ class FriendMixIn(BaseMixIn):
         param = {
             "CurrentChatRoomContactSeq": chatroom_seq,
             "CurrentWxcontactSeq": wx_seq,
-            "Wxid": self.wxid
+            "Wxid": self.status.wxid
         }
         resp = await post(f"{URL}/Friend/GetContractList", body=param)
         if resp.get("Success"):
@@ -32,7 +32,7 @@ class FriendMixIn(BaseMixIn):
         param = {
             "ChatRoom": "",
             "Towxids": to_wxid,
-            "Wxid": self.wxid
+            "Wxid": self.status.wxid
         }
         resp = await post(f"{URL}/Friend/GetContractDetail", body=param)
         if resp.get("Success"):

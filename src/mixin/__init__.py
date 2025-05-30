@@ -1,6 +1,5 @@
 # 导入通用 MixIn
 from .plugin import PluginMixin
-from .status import StatusMixIn
 from .schedule import ScheduleMixin
 from .protocol import ProtocolMixIn
 
@@ -31,16 +30,7 @@ if selected_protocol is None:
     raise Exception("用户未选择协议。")
 
 # 根据用户选择导入对应的 mixin
-if selected_protocol == "xy":
-    from .xy import (
-        LoginMixIn,
-        MessageMixIn,
-        UserMixIn,
-        ChatroomMixIn,
-        FriendMixIn,
-        ToolMixIn
-    )
-elif selected_protocol == "xxxipad":
+if selected_protocol == "xxxipad":
     from .xxxipad import (
         LoginMixIn,
         MessageMixIn,
@@ -55,7 +45,6 @@ else:
 
 __all__ = [
     "PluginMixin",
-    "StatusMixIn",
     "ScheduleMixin",
     "LoginMixIn",
     "MessageMixIn",

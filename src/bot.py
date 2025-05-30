@@ -1,13 +1,12 @@
-from typing import Optional, TYPE_CHECKING
 from src.mixin import (
-    MessageMixIn, LoginMixIn, StatusMixIn, 
+    MessageMixIn, LoginMixIn, ProtocolMixIn, 
     UserMixIn, ChatroomMixIn, FriendMixIn, 
-    ToolMixIn, PluginMixin, ScheduleMixin,
-    ProtocolMixIn
+    ToolMixIn, PluginMixin, ScheduleMixin
 )
+from src.status import StatusManager
 from src.utils import logger, Whitelist, Redis
 from src.config import conf
-
+from typing import Optional, TYPE_CHECKING
 if TYPE_CHECKING:
     pass
 
@@ -15,8 +14,7 @@ if TYPE_CHECKING:
 class Bot(
     ScheduleMixin, MessageMixIn, LoginMixIn, 
     UserMixIn, ChatroomMixIn, FriendMixIn, 
-    ToolMixIn, PluginMixin, ProtocolMixIn,
-    StatusMixIn
+    ToolMixIn, PluginMixin, ProtocolMixIn
 ):
     """机器人主类，集成所有功能模块"""
     
@@ -26,6 +24,7 @@ class Bot(
         super().__init__()
         self.whitelist = Whitelist()
         self.redis = Redis()
+        self.status = StatusManager()
     
     
     async def preload(self) -> None:
@@ -34,7 +33,7 @@ class Bot(
         self.load_whitelist()
         self.use_queue()
         await self.redis.run()
-        await self.load_status()
+        await self.status.load()
         await self.load_plugin_from_dictionary()
         
         
@@ -64,7 +63,7 @@ class Bot(
             enable = conf().get("MESSAGE_QUEUE",{}).get("enable", False)
             interval = conf().get("MESSAGE_QUEUE",{}).get("interval", 1.0)
             if enable:
-                from src.message import MessageQueue
+                from src.event import MessageQueue
                 MessageQueue.get_instance(interval).start()
                 logger.info(f"消息队列已启动，全局发送间隔 {interval} 秒")
             else:
@@ -80,8 +79,7 @@ class Bot(
     
     async def destroy(self) -> None:
         """销毁Bot实例，清理资源"""
-        from src.message import MessageQueue
-        self.is_logged = False
+        from src.event import MessageQueue
         self.stop_schedule()
         await self.redis.close()
         try:
@@ -90,4 +88,4 @@ class Bot(
         except Exception as e:
             logger.warning(f"关闭消息队列时出错: {e}")
             
-        self.save_status()
+        await self.status.save()

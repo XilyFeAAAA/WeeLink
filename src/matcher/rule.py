@@ -1,4 +1,4 @@
-from src.message import Message, TextMessage
+from src.event import Message, TextMessage
 from src.model import MessageSource
 from typing_extensions import override
 import abc

@@ -93,7 +93,7 @@ class Message:
         if time.time() - create_time >= 60 * 5:
             return None
         # 过滤自己发的消息
-        if data["FromUserName"]["string"] == bot.wxid: return
+        if data["FromUserName"]["string"] == bot.status.wxid: return
         # 白名单过滤
         # 群聊 or 私聊判断
         if from_wxid.endswith("@chatroom"):
@@ -149,7 +149,7 @@ class TextMessage(Message):
             self.sender = await cache.chatroom.get_member(sender_wxid, self.chatroom.chatroom_id)
             # 获取at信息
             self.ats = await self.get_ats()
-            self.at_me = any(at.wxid == bot.wxid for at in self.ats)
+            self.at_me = any(at.wxid == bot.status.wxid for at in self.ats)
         elif self.source == MessageSource.FRIEND:
             self.text = self.content
         

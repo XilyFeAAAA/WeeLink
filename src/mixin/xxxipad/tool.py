@@ -11,7 +11,7 @@ class ToolMixIn(BaseMixIn):
                                    data_len: int, sta_pos: int, download_size: int) -> bytes:
         """分段下载图片"""
         param = {
-            "Wxid": self.wxid,
+            "Wxid": self.status.wxid,
             "ToWxid": to_wxid,
             "MsgId": int(msg_id),
             "DataLen": data_len,
@@ -54,7 +54,7 @@ class ToolMixIn(BaseMixIn):
     async def download_cdn_image(self, aeskey: str, cdnmidimgurl: str) -> str:
         """CDN下载图片"""
         param = {
-            "Wxid": self.wxid, 
+            "Wxid": self.status.wxid, 
             "FileAesKey": aeskey, 
             "FileNo": cdnmidimgurl
         }
@@ -68,7 +68,7 @@ class ToolMixIn(BaseMixIn):
     async def download_voice(self, msg_id: str, voiceurl: str, length: int) -> str:
         """下载语音文件"""
         param = {
-            "Wxid": self.wxid, 
+            "Wxid": self.status.wxid, 
             "MsgId": msg_id, 
             "Voiceurl": voiceurl, 
             "Length": length
@@ -83,7 +83,7 @@ class ToolMixIn(BaseMixIn):
     async def download_attach(self, attach_id: str) -> dict:
         """下载附件"""
         param = {
-            "Wxid": self.wxid, 
+            "Wxid": self.status.wxid, 
             "AttachId": attach_id
         }
         resp = await post(f"{URL}/Tools/DownloadAttach", body=param)
@@ -105,7 +105,7 @@ class ToolMixIn(BaseMixIn):
                 "StartPos": sta_pos
             },
             "ToWxid": to_wxid,
-            "Wxid": self.wxid
+            "Wxid": self.status.wxid
         }
         resp = await post(f"{URL}/Tools/DownloadVideo", body=param)
         if resp.get("Success", False):
@@ -138,7 +138,7 @@ class ToolMixIn(BaseMixIn):
     async def set_step(self, count: int) -> bool:
         """设置步数"""
         param = {
-            "Wxid": self.wxid, 
+            "Wxid": self.status.wxid, 
             "StepCount": count
         }
         resp = await post(f"{URL}/Tools/SetStep", body=param)

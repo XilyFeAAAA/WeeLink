@@ -8,7 +8,7 @@ class ChatroomMixIn(BaseMixIn):
         """获取群详情(不带公告内容)"""
         param = {
             "QID": chatroom_id,
-            "Wxid": self.wxid
+            "Wxid": self.status.wxid
         }
         resp = await post(f"{URL}/Group/GetChatRoomInfo", body=param)
         return resp.get("Data") if resp.get("Success") else None
@@ -19,7 +19,7 @@ class ChatroomMixIn(BaseMixIn):
         """获取群成员"""
         param = {
             "QID": chatroom_id,
-            "Wxid": self.wxid
+            "Wxid": self.status.wxid
         }
         resp = await post(f"{URL}/Group/GetChatRoomMemberDetail", body=param)
         return resp.get("Data", {}).get("NewChatroomData", {}).get("ChatRoomMember", []) if resp.get("Success") else []

@@ -1,4 +1,4 @@
-from src.message import TextMessage, VoiceMessage, ImageMessage
+from src.event import TextMessage, VoiceMessage, ImageMessage
 from src.bot import Bot
 from src.plugin import PluginBase
 from src.model import MessageSource

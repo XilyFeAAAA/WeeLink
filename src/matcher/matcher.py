@@ -1,5 +1,5 @@
 from src.model import AddMsgType, SystemMsgType, DataType, ModContactType
-from src.message import Message, ModContact
+from src.event import Message, ModContact
 from src.utils import logger
 from src.bot import Bot
 from .rule import Rule

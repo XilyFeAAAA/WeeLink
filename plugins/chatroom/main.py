@@ -1,4 +1,4 @@
-from src.message import ChatroomModify
+from src.event import ChatroomModify
 from src.bot import Bot
 from src.plugin import PluginBase
 
