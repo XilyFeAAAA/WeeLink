@@ -19,7 +19,7 @@ import hashlib
 import time
 import math
 
-bot = Bot.get_instance()
+
 
 class Message:
     _type_registry: dict = {}
@@ -79,6 +79,8 @@ class Message:
 
     @classmethod
     async def new(cls, data) -> "Message":
+        bot = await Bot.get_instance()
+        
         # 处理通用信息
         from_wxid = data.get("FromUserName", {}).get("string")
         to_wxid = data.get("ToUserName", {}).get("string")
@@ -97,11 +99,9 @@ class Message:
         # 白名单过滤
         # 群聊 or 私聊判断
         if from_wxid.endswith("@chatroom"):
-            if not bot.whitelist.is_chatroom_allowed(from_wxid): return
             source = MessageSource.CHATROOM
             chatroom = await cache.chatroom.get(from_wxid)
         else:
-            if not bot.whitelist.is_user_allowed(from_wxid): return
             source = MessageSource.FRIEND
             sender = await cache.friend.get(from_wxid)
         # 根据消息类型分发
@@ -138,6 +138,8 @@ class TextMessage(Message):
         
 
     async def parse(self) -> "TextMessage":
+        bot = await Bot.get_instance()
+        
         if self.source == MessageSource.CHATROOM:
             # 分割群聊消息发送人
             sender_wxid, self.content = self.content.split(':\n')
@@ -168,63 +170,63 @@ class TextMessage(Message):
         return f"<TextMessage sender={self.sender} text={self.text}>"
 
 
-@Message.register_type(AddMsgType.APPMSG)
-class XmlMessage(TextMessage):
+# @Message.register_type(AddMsgType.APPMSG)
+# class XmlMessage(TextMessage):
    
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+#     def __init__(self, **kwargs):
+#         super().__init__(**kwargs)
     
-    async def parse(self) -> "XmlMessage":
-        await super().parse()
-        try:
-            root = ElementTree.fromstring(self.content)
-            type = int(root.find("appmsg").findtext("type"))
-            if type == XmlType.QUOTE:
-                await self.handle_quote()
-            elif type == XmlType.FILE:
-                logger.warning("未适配FILE类型XML")
-                raise NotImplementedError()
-            elif type == XmlType.SHARE_LINK:
-                logger.warning("未适配SHARE_LINK类型XML")
-                raise NotImplementedError()
-            elif type == XmlType.UPLOAD:
-                logger.warning("未适配UPLOAD类型XML")
-                raise NotImplementedError()
-            else:
-                raise Exception(f"未识别的 XML 类型:{type}")
-        except Exception as e:
-            logger.error(f"解析xml消息失败: {e}")
-            return  
-        finally:
-            return self
+#     async def parse(self) -> "XmlMessage":
+#         await super().parse()
+#         try:
+#             root = ElementTree.fromstring(self.content)
+#             type = int(root.find("appmsg").findtext("type"))
+#             if type == XmlType.QUOTE:
+#                 await self.handle_quote()
+#             elif type == XmlType.FILE:
+#                 logger.warning("未适配FILE类型XML")
+#                 raise NotImplementedError()
+#             elif type == XmlType.SHARE_LINK:
+#                 logger.warning("未适配SHARE_LINK类型XML")
+#                 raise NotImplementedError()
+#             elif type == XmlType.UPLOAD:
+#                 logger.warning("未适配UPLOAD类型XML")
+#                 raise NotImplementedError()
+#             else:
+#                 raise Exception(f"未识别的 XML 类型:{type}")
+#         except Exception as e:
+#             logger.error(f"解析xml消息失败: {e}")
+#             return  
+#         finally:
+#             return self
         
         
-    async def handle_quote(self, appmsg: ElementTree.Element) -> None:
-        """处理引用消息"""
-        if refermsg := appmsg.find("type"):
-            self.refer_type = refermsg.findtext("type")
-            self.new_msg_id = refermsg.find("svrid").text
-            self.to_wxid = refermsg.find("fromusr").text
-            self.from_wxid = refermsg.find("chatusr").text
-            self.nickname = refermsg.find("displayname").text
-            self.msg_source = refermsg.find("msgsource").text
-            self.createtime = refermsg.find("createtime").text
-            self.content = refermsg.find("content").text
+#     async def handle_quote(self, appmsg: ElementTree.Element) -> None:
+#         """处理引用消息"""
+#         if refermsg := appmsg.find("type"):
+#             self.refer_type = refermsg.findtext("type")
+#             self.new_msg_id = refermsg.find("svrid").text
+#             self.to_wxid = refermsg.find("fromusr").text
+#             self.from_wxid = refermsg.find("chatusr").text
+#             self.nickname = refermsg.find("displayname").text
+#             self.msg_source = refermsg.find("msgsource").text
+#             self.createtime = refermsg.find("createtime").text
+#             self.content = refermsg.find("content").text
             
-            # 处理文本引用
-            if self.refer_type == QuoteType.TEXT:
-                # 无需处理
-                pass
-            # 处理图片引用
-            elif self.refer_type == QuoteType.IMAGE:
-                ...
-            # 处理多选消息引用
-            elif self.refer_type == QuoteType.HISTORY:
-                ...
-            else:
-                raise Exception(f"Quote 类型：{self.refer_type}未适配")
-        else:
-            raise Exception("XML 消息未能找到 refermsg")
+#             # 处理文本引用
+#             if self.refer_type == QuoteType.TEXT:
+#                 # 无需处理
+#                 pass
+#             # 处理图片引用
+#             elif self.refer_type == QuoteType.IMAGE:
+#                 ...
+#             # 处理多选消息引用
+#             elif self.refer_type == QuoteType.HISTORY:
+#                 ...
+#             else:
+#                 raise Exception(f"Quote 类型：{self.refer_type}未适配")
+#         else:
+#             raise Exception("XML 消息未能找到 refermsg")
          
 
 class DownloadMessage(Message):
@@ -254,6 +256,7 @@ class VideoMessage(DownloadMessage):
 
     async def parse(self) -> "VideoMessage":
         """解析视频数据"""
+        bot = await Bot.get_instance()
         
         def get_format(data) -> str:
             """判断视频格式"""
@@ -323,6 +326,8 @@ class VideoMessage(DownloadMessage):
     
     async def chunk_download(self) -> bytes:
         """分段下载视频"""
+        bot = await Bot.get_instance()
+        
         data_len = int(self.length)
         chunk_size = 64 * 1024
         chunks = math.ceil(data_len / chunk_size)
@@ -353,6 +358,7 @@ class VoiceMessage(DownloadMessage):
         self.suffix = "wav"
     
     async def parse(self) -> "VoiceMessage":
+        bot = await Bot.get_instance()
         if self.source == MessageSource.CHATROOM:
             # 分割群聊消息发送人
             sender_wxid, voice_xml = self.content.split(':\n')
@@ -383,6 +389,7 @@ class VoiceMessage(DownloadMessage):
 
     async def save_voice(self, data) -> str:
         """silk 格式的 base64 数据保存到 {md5}.wav"""
+        bot = await Bot.get_instance()
         try:
             silk_byte = base64.b64decode(data)
             wav_data = await pysilk.async_decode(silk_byte, to_wav=True)
@@ -429,16 +436,16 @@ class SystemMessage(Message):
             # 检查XML中存在的节点来确定消息类型
             if root.find("pat") is not None:
                 self.sys_type = SystemMsgType.PAT
-                rtn_msg = PatMessage(**self.__dict__)
+                rtn_msg = PatMessage(**self._get_base_params())
             elif root.find("mmchatroombarannouncememt") is not None:
                 self.sys_type = SystemMsgType.ANNOUNCEMENT
-                rtn_msg = AnnouncementMessage(**self.__dict__)
+                rtn_msg = AnnouncementMessage(**self._get_base_params())
             elif root.find("todo") is not None:
                 self.sys_type = SystemMsgType.TODO
-                rtn_msg = TodoMessage(**self.__dict__)
+                rtn_msg = TodoMessage(**self._get_base_params())
             elif root.find("revokemsg") is not None:
                 self.sys_type = SystemMsgType.REVOKE
-                rtn_msg = RevokeMessage(**self.__dict__)
+                rtn_msg = RevokeMessage(**self._get_base_params())
             elif root.find("sysmsgtemplate") is not None:
                 # self.sys_type = SystemMsgType.TEMPLATE
                 # rtn_msg = InviteMessage(**self.__dict__)
@@ -456,6 +463,24 @@ class SystemMessage(Message):
         except Exception as e:
             logger.error(f"系统消息XML解析失败: {e}")
             raise
+        
+    def _get_base_params(self):
+        """获取基础参数，用于传递给子类构造函数"""
+        return {
+            'data': self.data,
+            'from_wxid': self.from_wxid,
+            'to_wxid': self.to_wxid,
+            'msg_type': self.msg_type,
+            'content': self.content,
+            'create_time': self.create_time,
+            'msg_source': self.msg_source,
+            'msg_id': self.msg_id,
+            'new_msg_id': self.new_msg_id,
+            'msg_seq': self.msg_seq,
+            'chatroom': self.chatroom,
+            'sender': self.sender,
+            'source': self.source
+        }
 
 
 # 群聊邀请消息
@@ -520,7 +545,7 @@ class RevokeMessage(SystemMessage):
         
     async def parse(self, root: ElementTree.Element) -> "RevokeMessage":
         """解析撤回消息"""
-        revoke = root.find("revoke")
+        revoke = root.find("revokemsg")
         self.revoke_msgid = revoke.findtext("msgid")
         self.revoke_newmsgid = revoke.findtext("newmsgid")
         self.revoke_session = revoke.findtext("session")
@@ -605,6 +630,7 @@ class PatMessage(SystemMessage):
         super().__init__(**kwargs)
         self.pat_from: ChatroomMember | Friend
         self.pat_to: ChatroomMember | Friend
+        self.patsuffix: str
         
     async def parse(self, root: ElementTree.Element) -> "PatMessage":
         """解析拍一拍消息"""
@@ -612,9 +638,9 @@ class PatMessage(SystemMessage):
         fromusername = pat.findtext("fromusername")
         pattedusername = pat.findtext("pattedusername")
         chatusername = pat.findtext("chatusername")
-        patsuffix = pat.findtext("patsuffix")
+        self.patsuffix = pat.findtext("patsuffix")
 
-        if fromusername and pattedusername and chatusername and patsuffix:
+        if fromusername and pattedusername and chatusername:
             if self.source == MessageSource.CHATROOM:
                 self.pat_from = await cache.chatroom.get_member(fromusername, chatusername)
                 self.pat_to = await cache.chatroom.get_member(pattedusername, chatusername)
@@ -674,7 +700,7 @@ class ImageMessage(DownloadMessage):
         
     async def download(self):
         """下载图片"""
-        
+        bot = await Bot.get_instance()
         def get_format(data) -> str:
             """判断图片格式"""
             kind = filetype.guess(data)

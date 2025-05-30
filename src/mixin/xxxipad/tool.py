@@ -6,10 +6,14 @@ import base64
 
 class ToolMixIn(BaseMixIn):
     
+    def __init__(self):
+        super().__init__()
+    
     
     async def download_chunk_image(self, msg_id: str, to_wxid: str, 
                                    data_len: int, sta_pos: int, download_size: int) -> bytes:
         """分段下载图片"""
+        logger.debug(self.status)
         param = {
             "Wxid": self.status.wxid,
             "ToWxid": to_wxid,

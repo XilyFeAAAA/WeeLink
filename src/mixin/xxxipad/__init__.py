@@ -4,4 +4,4 @@ from .user import UserMixIn
 from .chatroom import ChatroomMixIn
 from .friend import FriendMixIn
 from .tool import ToolMixIn
-from ..plugin import PluginMixin 
+from .protocol import ProtocolMixIn

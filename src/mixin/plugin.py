@@ -37,5 +37,5 @@ class PluginMixin(BaseMixIn):
         
         plugin = plugin_class()
         plugin.register_matchers()
-        await plugin.async_init(Bot.get_instance())
+        await plugin.async_init(await Bot.get_instance())
         logger.success(f"插件 {plugin_name} 已成功安装，作者:{plugin_author} 版本:{plugin_version}")

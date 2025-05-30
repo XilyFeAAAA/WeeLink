@@ -1,7 +1,7 @@
 from src.config import conf
 from src.utils import get, logger
 from src.mixin.base import BaseMixIn
-from .xxxipad.constants import URL
+from .constants import URL
 import asyncio
 
 class ProtocolMixIn(BaseMixIn):

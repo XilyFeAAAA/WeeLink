@@ -1,9 +1,6 @@
 from src.model import Chatroom, ChatroomMember, ModContactType, DataType, Friend
 from src.manager import cache
 from src.utils import logger
-from src.bot import Bot
-
-bot = Bot.get_instance()
 
 class ModContact:
     _type_registry: dict = {}

@@ -1,10 +1,8 @@
-from src.bot import Bot
 from src.model import Contact
 from src.utils import logger
 from .cache import Cache
 import asyncio
 
-bot = Bot.get_instance()
 
 class ContactCache(Cache):
     

@@ -3,22 +3,23 @@ from src.mixin import (
     UserMixIn, ChatroomMixIn, FriendMixIn, 
     ToolMixIn, PluginMixin, ScheduleMixin
 )
+from src.utils import logger, Whitelist, Redis, safe_create_task
 from src.status import StatusManager
-from src.utils import logger, Whitelist, Redis
 from src.config import conf
-from typing import Optional, TYPE_CHECKING
-if TYPE_CHECKING:
-    pass
+from typing import Optional
+import asyncio
+
 
 
 class Bot(
-    ScheduleMixin, MessageMixIn, LoginMixIn, 
-    UserMixIn, ChatroomMixIn, FriendMixIn, 
-    ToolMixIn, PluginMixin, ProtocolMixIn
+    ScheduleMixin, MessageMixIn, ToolMixIn, 
+    LoginMixIn , ChatroomMixIn, FriendMixIn, 
+    UserMixIn, PluginMixin, ProtocolMixIn
 ):
     """机器人主类，集成所有功能模块"""
     
     _instance: Optional['Bot'] = None
+    _lock = asyncio.Lock()
 
     def __init__(self) -> None:
         super().__init__()
@@ -38,10 +39,12 @@ class Bot(
         
         
     @classmethod
-    def get_instance(cls) -> 'Bot':
+    async def get_instance(cls) -> 'Bot':
         """获取Bot单例实例"""
         if cls._instance is None:
-            cls._instance = cls()
+            async with cls._lock:
+                if cls._instance is None:
+                    cls._instance = cls()
         return cls._instance
 
 
@@ -89,3 +92,34 @@ class Bot(
             logger.warning(f"关闭消息队列时出错: {e}")
             
         await self.status.save()
+        
+        
+    async def run(self):
+        """
+        处理消息数据
+        AddMsg
+        ModContact 好友消息、群信息变更
+        DelContact (自己)删除好友，(自己)退出群聊
+        """
+        
+        from src.matcher import Matcher
+        
+        failure_count = 0
+        max_failures = 3
+        async for data in self.message_generator():
+            if data is None:
+                failure_count += 1
+                if failure_count > max_failures:
+                    return logger.error("接收消息失败次数过多，退出消息处理循环")
+            failure_count = 0        
+            if isinstance(data, dict):
+                # logger.debug(data)
+                for msg in (data.get("AddMsgs") or []):
+                    safe_create_task(Matcher.handle_addmsg(msg))
+                for msg in ( data.get("ModContacts") or []):
+                    logger.debug("遇到ModContacts")
+                    safe_create_task(Matcher.handle_modcontact(msg))
+            elif isinstance(data, str):
+                if "已退出登录" in data or "会话已过期" in data:
+                    return logger.warning(f"接收到退出消息: {data}")
+                    

@@ -4,11 +4,7 @@ from src.utils import logger
 from src.bot import Bot
 from .rule import Rule
 from datetime import datetime
-from typing import cast
 
-
-
-bot = Bot.get_instance()
 
 
 class Matcher:
@@ -127,6 +123,7 @@ class Matcher:
 
 
 async def check_and_run_matcher(matcher: Matcher, data: Message | ModContact) -> bool:
+    bot = await Bot.get_instance()
     # 类型检查
     if data.type == DataType.ADDMSG:
         if data.msg_type != matcher.addmsg_type or (

@@ -1,7 +1,6 @@
 # 导入通用 MixIn
 from .plugin import PluginMixin
 from .schedule import ScheduleMixin
-from .protocol import ProtocolMixIn
 
 import questionary
 import os
@@ -37,7 +36,8 @@ if selected_protocol == "xxxipad":
         UserMixIn,
         ChatroomMixIn,
         FriendMixIn,
-        ToolMixIn
+        ToolMixIn,
+        ProtocolMixIn
     )
 else:
     # 理论上不会到这里，因为选项是动态生成的

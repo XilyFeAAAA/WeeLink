@@ -1,11 +1,8 @@
-from src.bot import Bot
 from src.model import Friend
 from src.utils import logger
 from .cache import Cache
 import asyncio
 
-
-bot = Bot.get_instance()
 
 class FriendCache(Cache):
     
@@ -16,6 +13,9 @@ class FriendCache(Cache):
 
     async def update(self, wxid: str) -> Friend:
         """调用接口更新好友信息"""
+        from src.bot import Bot
+        bot = await Bot.get_instance()
+        
         friends = await bot.get_friend_info(wxid)
         if len(friends) != 1: 
             raise RuntimeError(f"获取好友信息失败，错误提示:返回联系人数量为{len(friends)}")

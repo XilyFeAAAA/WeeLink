@@ -1,10 +1,7 @@
-from src.bot import Bot
 from src.model import Chatroom, ChatroomMember
 from src.utils import logger
 from .cache import Cache
 import asyncio
-
-bot = Bot.get_instance()
 
 class ChatroomCache(Cache):
     
@@ -14,6 +11,10 @@ class ChatroomCache(Cache):
         
     async def update(self, chatroom_id: str) -> Chatroom:
         """调用接口更新群聊信息"""
+        # 延迟导入Bot，避免循环导入
+        from src.bot import Bot
+        bot = await Bot.get_instance()
+        
         chatroom_info = await bot.get_chatroom_info(chatroom_id)
         member_list = await bot.get_chatroom_member(chatroom_id)
         if chatroom_info is None:

@@ -1,11 +1,16 @@
 from src.utils import post, logger
 from src.mixin.base import BaseMixIn
-from src.event.queue import MessageQueue
 from .constants import URL
+import asyncio
 
-queue = MessageQueue.get_instance()
 
 class MessageMixIn(BaseMixIn):
+    
+    def __init__(self) -> None:
+        super().__init__()
+        # 避免循环引用
+        from src.event.queue import MessageQueue
+        self.queue = MessageQueue.get_instance()
     
 
     # @BaseMixIn.require_login
@@ -23,7 +28,8 @@ class MessageMixIn(BaseMixIn):
 
     async def send_text(self, to_wxid: str, content: str, at: str = "", type_: int = 1):
         """调用消息队列"""
-        queue.add_message(self._send_text, to_wxid, content, at, type_)
+        
+        self.queue.add_message(self._send_text, to_wxid, content, at, type_)
 
     async def _send_text(self, to_wxid: str, content: str, at: str = "", type_: int = 1):
         """发送文本消息，type=1文本，at为@人wxid，多个用,隔开"""
@@ -99,7 +105,7 @@ class MessageMixIn(BaseMixIn):
     #         self.error_handler(resp)
 
     async def send_link(self, to_wxid: str, title: str, desc: str, url: str, thumb_url: str):
-        queue.add_message(self._send_link, to_wxid, title, desc, url, thumb_url)
+        self.queue.add_message(self._send_link, to_wxid, title, desc, url, thumb_url)
 
     async def _send_link(self, to_wxid: str, title: str, desc: str, url: str, thumb_url: str):
         """发送分享链接消息"""
@@ -136,7 +142,7 @@ class MessageMixIn(BaseMixIn):
 
     async def send_app_message(self, to_wxid: str, xml: str, type: int):
         """调用消息队列"""
-        queue.add_message(self._send_app_message,  to_wxid, xml, type)
+        self.queue.add_message(self._send_app_message,  to_wxid, xml, type)
 
 
     async def _send_app_message(self, to_wxid: str, xml: str, type: int) -> tuple[int, int, int]:
@@ -154,3 +160,15 @@ class MessageMixIn(BaseMixIn):
             return data.get("clientMsgId"), data.get("createTime"), data.get("newMsgId")
         else:
             self.error_handler(resp)
+            
+    async def message_generator(self):
+        """消息处理循环，作为生成器返回消息数据"""
+        while True:
+            status, data = await self.sync_message()
+            if status:
+                yield data
+            else:
+                yield None
+            await asyncio.sleep(0.5)
+
+            
