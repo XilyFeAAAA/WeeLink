@@ -1,5 +1,5 @@
+from src import config
 from src.utils import logger
-from src.config import conf
 from redis import asyncio as aioredis
 from typing import AsyncGenerator, Optional
 
@@ -20,8 +20,8 @@ class Redis:
 
     async def run(self) -> None:
         """初始化 Redis"""
-        host = conf().get("REDIS_HOST")
-        port = conf().get("REDIS_PORT")
+        host = config.REDIS_HOST
+        port = config.REDIS_PORT
         if not host and not port:
             raise Exception("Redis 配置错误")
         self._redis = aioredis.Redis(host=host, port=port)

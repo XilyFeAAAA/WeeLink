@@ -1,4 +1,4 @@
-from src.config import conf
+from src import config
 from src.utils import get, logger
 from src.mixin.base import BaseMixIn
 from .constants import URL
@@ -8,7 +8,7 @@ class ProtocolMixIn(BaseMixIn):
     
     async def check_protocol(self) -> None:
         """验证 Protocol 是否启动"""
-        max_retries = conf().get("MAX_RETRY", 5)
+        max_retries = 3
         cnt_retry = 0
         while True:
             logger.warning(f"正在连接协议: {cnt_retry}/{max_retries}")
@@ -22,5 +22,3 @@ class ProtocolMixIn(BaseMixIn):
             if cnt_retry >= max_retries:
                 raise Exception("协议连接超时")
             cnt_retry += 1
-    
-    

@@ -1,7 +1,6 @@
 from src.bot import Bot
 from src.plugin import PluginBase
 from src.utils import logger, Redis
-from src.config import conf
 import os
 
 
@@ -18,7 +17,7 @@ class AutoCleaner(PluginBase):
             handle=self.cleaner,
             task_id="auto-cleaner",
             trigger="interval",
-            minutes=conf().get("DELETE_IMG_INTERVAL", 60)
+            minutes=60
         )
     
     

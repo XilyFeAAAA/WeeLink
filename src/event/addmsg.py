@@ -1,11 +1,11 @@
+from src import config
 from src.model import (
     AddMsgType, DataType, ChatroomMember, 
-    Friend, MessageSource, XmlType, QuoteType,
+    Friend, MessageSource,
     SystemMsgType, Chatroom)
 from src.manager import cache
 from src.utils import logger
 from src.bot import Bot
-from src.config import conf
 from xml.etree import ElementTree
 from PIL import Image, ImageFile
 import filetype
@@ -316,7 +316,7 @@ class VideoMessage(DownloadMessage):
                 await f.write(video_bytes)
                 
             # Redis 记录过期时间, 如果能 get 到说明还没过期 
-            exp = int(time.time()) + conf().get("VIDEO_EXPIRE", 60*2)
+            exp = int(time.time()) + config.VIDEO_EXPIRE
             await bot.redis.set(file_name, "", ex=exp)
             logger.info(f"视频已保存到: {self.filepath}")
         except Exception as e:
@@ -403,7 +403,7 @@ class VoiceMessage(DownloadMessage):
                     await f.write(wav_data)
             
             # Redis 记录过期时间
-            exp = int(time.time()) + conf().get("VOICE_EXPIRE", 60*2)
+            exp = int(time.time()) + config.VOICE_EXPIRE
             await bot.redis.set(file_name, "", ex=exp)
             logger.info(f"图片已保存到: {self.filepath}")
         except Exception as e:
@@ -778,7 +778,7 @@ class ImageMessage(DownloadMessage):
                 logger.info(f"图片已保存到: {self.filepath}")
                 
                 # Redis 记录过期时间
-                exp = int(time.time()) + conf().get("IMG_EXPIRE", 60*2)
+                exp = int(time.time()) + config.IMG_EXPIRE
                 await bot.redis.set(file_name, "", ex=exp)
             except Exception as save_error:
                 logger.error(f"保存图片文件失败: {save_error}")

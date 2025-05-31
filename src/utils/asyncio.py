@@ -1,4 +1,3 @@
-from .exception import global_exception_handler
 import asyncio
 import inspect
 
@@ -8,8 +7,6 @@ def handle_task_exception(task):
     except asyncio.CancelledError:
         # 忽略任务取消异常
         pass
-    except Exception as e:
-        global_exception_handler(type(e), e, e.__traceback__)
         
 
 def safe_create_task(coro):

@@ -13,7 +13,7 @@ class ScheduleMixin(BaseMixIn):
         self._schedule = AsyncIOScheduler()
     
     
-    def run_schedule(self):
+    def start_schedule(self):
         """启动 APScheduler"""
         self._schedule.start()
         logger.info("任务调度器启动")
