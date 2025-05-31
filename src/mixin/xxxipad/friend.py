@@ -1,9 +1,8 @@
 from src.utils.http import post
-from src.mixin.base import BaseMixIn
 from .constants import URL
 
-class FriendMixIn(BaseMixIn):
-    
+class FriendMixIn:
+
                 
     async def get_range_friends(self, wx_seq: int, chatroom_seq: int):
         param = {
@@ -15,7 +14,7 @@ class FriendMixIn(BaseMixIn):
         if resp.get("Success"):
             return resp.get("Data")
         else:
-            self.error_handler(resp)
+            raise Exception(f"get_range_friends 接口错误")
      
     async def get_friends(self) -> list[str]:
         id_list = []
@@ -38,5 +37,5 @@ class FriendMixIn(BaseMixIn):
         if resp.get("Success"):
             return resp.get("Data").get("ContactList")
         else:
-            self.error_handler(resp)
+            raise Exception(f"get_friend_info 接口错误")
         

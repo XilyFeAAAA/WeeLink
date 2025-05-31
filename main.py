@@ -1,6 +1,6 @@
 import asyncio
 from src.bot import Bot
-from src.utils import logger, Exc
+from src.utils import logger
 from src.db.create import close_db_connection
 
 class ChatBotApplication:
@@ -38,11 +38,11 @@ class ChatBotApplication:
 
 async def main() -> None:
     """主函数"""
-    exc = Exc()
-    loop = asyncio.get_running_loop()
-    exc.install_exception_hook(loop)
-    app = ChatBotApplication()
-    await app.run()
+    try:
+        app = ChatBotApplication()
+        await app.run()
+    except KeyboardInterrupt:
+        await app.shutdown()
 
 if __name__ == "__main__":
     asyncio.run(main())

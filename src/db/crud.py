@@ -6,7 +6,9 @@ from sqlalchemy import select
 async def add_account(wxid: str, uuid: str, nickname: str, alias: str, 
                       phone: str, device_name: str, device_id: str) -> None:
     """添加账户"""
+    
     acc = Account(wxid=wxid,uuid=uuid,nickname=nickname,alias=alias,phone=phone,device_id=device_id,device_name=device_name)
+    print(f"调用add_account {acc}")
     async with async_session.begin() as session:
         # 先检查是否已存在同样的wxid账户
         query = select(Account).where(Account.wxid == wxid)

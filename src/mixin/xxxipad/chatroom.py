@@ -1,8 +1,7 @@
 from src.utils.http import post
-from src.mixin.base import BaseMixIn
 from .constants import URL
 
-class ChatroomMixIn(BaseMixIn):
+class ChatroomMixIn:
     
     async def get_chatroom_info(self, chatroom_id: str):
         """获取群详情(不带公告内容)"""

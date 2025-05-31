@@ -1,6 +1,5 @@
 from src.utils import logger
 from src.plugin import PluginBase
-from .base import BaseMixIn
 import os
 import inspect
 import importlib
@@ -8,7 +7,7 @@ import importlib
 
 
 
-class PluginMixin(BaseMixIn):
+class PluginMixin:
 
 
     async def load_plugin_from_dictionary(self):

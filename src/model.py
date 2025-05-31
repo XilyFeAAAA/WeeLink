@@ -3,6 +3,34 @@ from typing import Optional
 from dataclasses import dataclass, field
 
 
+
+class EventType(Enum):
+    # MESSAGE
+    TEXT = auto()
+    VOICE = auto()
+    IMAGE = auto()
+    VIDEO = auto()
+    EMOJI = auto()
+    # XML
+    UPLOAD = auto()
+    FILE = auto()
+    LINK = auto()
+    QUOTE = auto()
+    # SYSTEM
+    PAT = auto()
+    INVITE = auto()
+    REVOKE = auto()
+    ANNOUNCE = auto()
+    TODO = auto()
+    FRIEND_ADD = auto()
+    FRIEND_DEL = auto()
+    FRIEND_MODIFY = auto()
+    CHATROOM_ADD = auto()
+    CHATROOM_DEL = auto()
+    CHATROOM_INCREASE = auto()
+    CHATROOM_DECREASE = auto()
+
+
 class DataType(Enum):
     TEST = auto()
     ADDMSG = auto()

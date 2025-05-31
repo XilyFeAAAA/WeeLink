@@ -12,7 +12,7 @@ class Echo(PluginBase):
     __version__ = "1.0.0"
 
 
-    @PluginBase.on_message()
+    @PluginBase.on_text()
     async def echo_message(self, bot: Bot, msg: TextMessage):
         if msg.source ==  MessageSource.FRIEND:
             source_ = '私聊' 

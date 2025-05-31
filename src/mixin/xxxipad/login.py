@@ -1,6 +1,5 @@
 from src.utils.http import post
 from src.utils.device import create_device_id, create_device_name
-from src.mixin.base import BaseMixIn
 from .constants import URL
 from loguru import logger
 import sys
@@ -8,7 +7,7 @@ import qrcode
 import asyncio
 
 
-class LoginMixIn(BaseMixIn):
+class LoginMixIn:
 
     
     async def login(self):
@@ -116,8 +115,7 @@ class LoginMixIn(BaseMixIn):
             else:
                 return False, resp.get("Data").get("expiredTime")
         else:
-            logger.error(resp)
-            # self.error_handler(resp)
+            raise Exception(f"check_login 接口错误")
             
                        
     async def start_auto_heartbeat(self):
@@ -149,5 +147,5 @@ class LoginMixIn(BaseMixIn):
         if resp.get("Success"):
             return resp.get("Running")
         else:
-            self.error_handler(resp)
+            raise Exception(f"status_auto_heartbeat 接口错误")
 

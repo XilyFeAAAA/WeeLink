@@ -4,7 +4,7 @@ from src.mixin import (
     UserMixIn, ChatroomMixIn, FriendMixIn, 
     ToolMixIn, PluginMixin, ScheduleMixin
 )
-from src.utils import logger, Redis, safe_create_task
+from src.utils import logger, Redis, print_exc
 from src.status import StatusManager
 from typing import Optional
 import asyncio
@@ -88,22 +88,31 @@ class Bot(
         DelContact (自己)删除好友，(自己)退出群聊
         """
         
-        from src.matcher import Matcher
-        
+        from src.event import AddMessage, ModContact
         failure_count = 0
         max_failures = 3
         async for data in self.message_generator():
+            
             if data is None:
                 failure_count += 1
                 if failure_count > max_failures:
                     return logger.error("接收消息失败次数过多，退出消息处理循环")
-            failure_count = 0        
-            if isinstance(data, dict):
-                for msg in (data.get("AddMsgs") or []):
-                    safe_create_task(Matcher.handle_addmsg(msg))
-                for msg in ( data.get("ModContacts") or []):
-                    safe_create_task(Matcher.handle_modcontact(msg))
-            elif isinstance(data, str):
-                if "已退出登录" in data or "会话已过期" in data:
-                    return logger.warning(f"接收到退出消息: {data}")
-                    
+            failure_count = 0
+            try:  
+                if isinstance(data, dict):
+                    for addmsg in (data.get("AddMsgs") or []):
+                        await AddMessage.new(addmsg)
+                    for modcontact in ( data.get("ModContacts") or []):
+                        await ModContact.new(modcontact)
+                elif isinstance(data, str):
+                    if "已退出登录" in data or "会话已过期" in data:
+                        return logger.warning(f"接收到退出消息: {data}")        
+            except Exception as e:
+                print_exc(type(e), e, e.__traceback__)
+
+"""
+1. 通过生成器得到 data
+2. 从data中的addmsgs和modcontacts中得到json
+3. 通过AddMessage.new生成消息对象
+4. new对象会通过self.parse生成一个对应的子类，调用self.publish发布事件
+"""

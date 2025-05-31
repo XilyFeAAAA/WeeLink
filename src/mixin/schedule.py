@@ -1,15 +1,13 @@
 from src.utils import logger
-from .base import BaseMixIn
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.jobstores.base import BaseJobStore
 import asyncio 
 
 
 
-class ScheduleMixin(BaseMixIn):
+class ScheduleMixin:
     
     def __init__(self) -> None:
-        super().__init__()
         self._schedule = AsyncIOScheduler()
     
     

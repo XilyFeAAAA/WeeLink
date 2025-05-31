@@ -1,10 +1,8 @@
-from src import config
 from src.utils import get, logger
-from src.mixin.base import BaseMixIn
 from .constants import URL
 import asyncio
 
-class ProtocolMixIn(BaseMixIn):
+class ProtocolMixIn:
     
     async def check_protocol(self) -> None:
         """验证 Protocol 是否启动"""

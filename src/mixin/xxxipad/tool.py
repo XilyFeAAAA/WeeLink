@@ -1,14 +1,10 @@
-from src.mixin.base import BaseMixIn
 from src.utils import post, logger
 from .constants import URL
 import base64
 
 
-class ToolMixIn(BaseMixIn):
-    
-    def __init__(self):
-        super().__init__()
-    
+class ToolMixIn:
+        
     
     async def download_chunk_image(self, msg_id: str, to_wxid: str, 
                                    data_len: int, sta_pos: int, download_size: int) -> bytes:
@@ -66,7 +62,7 @@ class ToolMixIn(BaseMixIn):
         if resp.get("Success", False):
             return resp.get("Data")
         else:
-            self.error_handler(resp)
+            raise Exception(f"download_cdn_image 接口错误")
                 
 
     async def download_voice(self, msg_id: str, voiceurl: str, length: int) -> str:
@@ -81,7 +77,7 @@ class ToolMixIn(BaseMixIn):
         if resp.get("Success", False):
             return resp.get("Data", {}).get("data", {}).get("buffer")
         else:
-            self.error_handler(resp)
+            raise Exception(f"download_voice 接口错误")
 
 
     async def download_attach(self, attach_id: str) -> dict:
@@ -94,7 +90,7 @@ class ToolMixIn(BaseMixIn):
         if resp.get("Success", False):
             return resp.get("Data", {}).get("data", {}).get("buffer")
         else:
-            self.error_handler(resp)
+            raise Exception(f"download_attach 接口错误")
 
 
     async def download_chunk_video(self,msg_id: str, to_wxid: str, 
@@ -149,4 +145,4 @@ class ToolMixIn(BaseMixIn):
         if resp.get("Success", False):
             return True
         else:
-            self.error_handler(resp)
+            raise Exception(f"set_step 接口错误")

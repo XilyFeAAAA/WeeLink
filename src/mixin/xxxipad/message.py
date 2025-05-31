@@ -1,13 +1,11 @@
 from src.utils import post, logger
-from src.mixin.base import BaseMixIn
 from .constants import URL
 import asyncio
 
 
-class MessageMixIn(BaseMixIn):
+class MessageMixIn:
     
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self):
         # 避免循环引用
         from src.event.queue import MessageQueue
         self.queue = MessageQueue.get_instance()
@@ -44,9 +42,9 @@ class MessageMixIn(BaseMixIn):
         if resp.get("Success"):
             return resp.get("Data")
         else:
-            self.error_handler(resp)
+            raise Exception(f"_send_text 接口错误")
 
-    async def send_image(self, to_wxid: str, base64: str):
+    async def _send_image(self, to_wxid: str, base64: str):
         """发送图片消息，base64为图片内容"""
         param = {
             "ToWxid": to_wxid,
@@ -57,7 +55,7 @@ class MessageMixIn(BaseMixIn):
         if resp.get("Success"):
             return resp.get("Data")
         else:
-            self.error_handler(resp)
+            raise Exception(f"_send_image 接口错误")
 
     # async def send_voice(self, to_wxid: str, base64: str, type_: int, voice_time: int):
     #     """发送语音消息，type为音频类型，voice_time为时长(毫秒)"""
@@ -122,9 +120,9 @@ class MessageMixIn(BaseMixIn):
         if resp.get("Success"):
             return resp.get("Data")
         else:
-            self.error_handler(resp)
+            raise Exception(f"_send_link 接口错误")
 
-    async def revoke(self, client_msg_id: int, create_time: int, new_msg_id: int, to_user_name: str):
+    async def _revoke(self, client_msg_id: int, create_time: int, new_msg_id: int, to_user_name: str):
         """撤回消息"""
         param = {
             "ClientMsgId": client_msg_id,
@@ -137,15 +135,15 @@ class MessageMixIn(BaseMixIn):
         if resp.get("Success"):
             return resp.get("Data")
         else:
-            self.error_handler(resp)
+            raise Exception(f"_revoke 接口错误")
             
 
-    async def send_app_message(self, to_wxid: str, xml: str, type: int):
+    async def send_app(self, to_wxid: str, xml: str, type: int):
         """调用消息队列"""
-        self.queue.add_message(self._send_app_message,  to_wxid, xml, type)
+        self.queue.add_message(self._send_app,  to_wxid, xml, type)
 
 
-    async def _send_app_message(self, to_wxid: str, xml: str, type: int) -> tuple[int, int, int]:
+    async def _send_app(self, to_wxid: str, xml: str, type: int) -> tuple[int, int, int]:
         """发送app消息"""
         param = {
             "Wxid": self.status.wxid, 
@@ -159,7 +157,7 @@ class MessageMixIn(BaseMixIn):
             logger.info(f"发送app消息: 对方wxid:{to_wxid} 类型:{type} ")
             return data.get("clientMsgId"), data.get("createTime"), data.get("newMsgId")
         else:
-            self.error_handler(resp)
+            raise Exception(f"_send_app 接口错误")
             
     async def message_generator(self):
         """消息处理循环，作为生成器返回消息数据"""

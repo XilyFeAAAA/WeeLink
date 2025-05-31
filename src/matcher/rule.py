@@ -1,4 +1,3 @@
-from src.event import Message, TextMessage
 from src.model import MessageSource
 from typing_extensions import override
 import abc
@@ -22,7 +21,7 @@ class keyword(Rule):
         self.keywords = keywords
     
     @override
-    def check(self, msg: TextMessage):
+    def check(self, msg: "TextMessage"):
          return any(keyword in msg.text for keyword in self.keywords)
 
 
@@ -33,7 +32,7 @@ class regex(Rule):
         self.flag = flag
         
     @override
-    def check(self, msg: TextMessage):
+    def check(self, msg: "TextMessage"):
         for pattern in self.patterns:
             if re.search(pattern, msg.text, self.flag):
                 return True
@@ -47,7 +46,7 @@ class command(Rule):
         self.cmd = cmd
         
     @override
-    def check(self, msg: TextMessage):
+    def check(self, msg: "TextMessage"):
         return False
 
 
@@ -58,7 +57,7 @@ class startswith(Rule):
         self.ignorecase = ignorecase
         
     @override
-    def check(self, msg: TextMessage):
+    def check(self, msg: "TextMessage"):
         if self.ignorecase:
             return msg.text.lower().startswith(self.text.lower())
         else:
@@ -72,7 +71,7 @@ class endswith(Rule):
         self.ignorecase = ignorecase
         
     @override
-    def check(self, msg: TextMessage):
+    def check(self, msg: "TextMessage"):
         if self.ignorecase:
             return msg.text.lower().startswith(self.text.lower())
         else:
@@ -87,7 +86,7 @@ class fullmatch(Rule):
         self.ignorecase = ignorecase
         
     @override
-    def check(self, msg: TextMessage):
+    def check(self, msg: "TextMessage"):
         if self.ignorecase:
             return msg.text.lower() == self.text.lower()
         else:
@@ -97,20 +96,20 @@ class fullmatch(Rule):
 class to_me(Rule):
     
     @override
-    def check(self, msg: TextMessage):
+    def check(self, msg: "TextMessage"):
         return msg.at_me
     
     
 class from_chatroom(Rule):
     
     @override
-    def check(self,  msg: TextMessage):
+    def check(self,  msg: "TextMessage"):
         return msg.source == MessageSource.CHATROOM
     
 class from_friend(Rule):
     
     @override
-    def check(self, msg: TextMessage):
+    def check(self, msg: "TextMessage"):
         return msg.source == MessageSource.FRIEND
     
 

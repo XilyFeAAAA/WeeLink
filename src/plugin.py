@@ -1,4 +1,4 @@
-from src.model import AddMsgType, SystemMsgType, DataType, ModContactType
+from src.model import EventType
 import abc
 import inspect
 
@@ -28,9 +28,8 @@ class PluginBase(abc.ABC):
     # AddMsg 装饰器
         
     @staticmethod
-    def on_message(**kwargs):
-        kwargs.setdefault("type", DataType.ADDMSG)
-        kwargs.setdefault("addmsg_type", AddMsgType.TEXT)
+    def on_text(**kwargs):
+        kwargs.setdefault("event", EventType.TEXT)
         def decorator(func):
             if not hasattr(func, '_event_handlers'):
                 func._event_handlers = []
@@ -42,8 +41,7 @@ class PluginBase(abc.ABC):
     
     @staticmethod
     def on_voice(**kwargs):
-        kwargs.setdefault("type", DataType.ADDMSG)
-        kwargs.setdefault("addmsg_type", AddMsgType.VOICE)
+        kwargs.setdefault("event", EventType.VOICE)
         def decorator(func):
             if not hasattr(func, '_event_handlers'):
                 func._event_handlers = []
@@ -55,8 +53,7 @@ class PluginBase(abc.ABC):
     
     @staticmethod
     def on_image(**kwargs):
-        kwargs.setdefault("type", DataType.ADDMSG)
-        kwargs.setdefault("addmsg_type", AddMsgType.IMAGE)
+        kwargs.setdefault("event", EventType.IMAGE)
         def decorator(func):
             if not hasattr(func, '_event_handlers'):
                 func._event_handlers = []
@@ -68,8 +65,7 @@ class PluginBase(abc.ABC):
     
     @staticmethod
     def on_video(**kwargs):
-        kwargs.setdefault("type", DataType.ADDMSG)
-        kwargs.setdefault("addmsg_type", AddMsgType.VIDEO)
+        kwargs.setdefault("event", EventType.VIDEO)
         def decorator(func):
             if not hasattr(func, '_event_handlers'):
                 func._event_handlers = []
@@ -78,24 +74,10 @@ class PluginBase(abc.ABC):
             return func
         return decorator
     
-    
-    @staticmethod
-    def on_system(**kwargs):
-        kwargs.setdefault("type", DataType.ADDMSG)
-        kwargs.setdefault("addmsg_type", AddMsgType.SYSTEMMSG)
-        def decorator(func):
-            if not hasattr(func, '_event_handlers'):
-                func._event_handlers = []
-                
-            func._event_handlers.append(kwargs)
-            return func
-        return decorator
     
     @staticmethod
     def on_pat(**kwargs):
-        kwargs.setdefault("type", DataType.ADDMSG)
-        kwargs.setdefault("addmsg_type", AddMsgType.SYSTEMMSG)
-        kwargs.setdefault("sys_type", SystemMsgType.PAT)
+        kwargs.setdefault("event", EventType.PAT)
         def decorator(func):
             if not hasattr(func, '_event_handlers'):
                 func._event_handlers = []
@@ -106,9 +88,7 @@ class PluginBase(abc.ABC):
     
     @staticmethod
     def on_announcement(**kwargs):
-        kwargs.setdefault("type", DataType.ADDMSG)
-        kwargs.setdefault("addmsg_type", AddMsgType.SYSTEMMSG)
-        kwargs.setdefault("sys_type", SystemMsgType.ANNOUNCEMENT)
+        kwargs.setdefault("event", EventType.ANNOUNCE)
         def decorator(func):
             if not hasattr(func, '_event_handlers'):
                 func._event_handlers = []
@@ -119,9 +99,7 @@ class PluginBase(abc.ABC):
     
     @staticmethod
     def on_todo(**kwargs):
-        kwargs.setdefault("type", DataType.ADDMSG)
-        kwargs.setdefault("addmsg_type", AddMsgType.SYSTEMMSG)
-        kwargs.setdefault("sys_type", SystemMsgType.TODO)
+        kwargs.setdefault("event", EventType.TODO)
         def decorator(func):
             if not hasattr(func, '_event_handlers'):
                 func._event_handlers = []
@@ -138,8 +116,7 @@ class PluginBase(abc.ABC):
         ignorecase: bool = False,
         **kwargs
     ):
-        kwargs.setdefault("type", DataType.ADDMSG)
-        kwargs.setdefault("addmsg_type", AddMsgType.TEXT)
+        kwargs.setdefault("event", EventType.TEXT)
         def decorator(func):
             from src.matcher.rule import startswith
             if not hasattr(func, '_event_handlers'):
@@ -157,8 +134,7 @@ class PluginBase(abc.ABC):
         ignorecase: bool = False,
         **kwargs
     ):
-        kwargs.setdefault("type", DataType.ADDMSG)
-        kwargs.setdefault("addmsg_type", AddMsgType.TEXT)
+        kwargs.setdefault("event", EventType.TEXT)
         def decorator(func):
             from src.matcher.rule import endswith
             if not hasattr(func, '_event_handlers'):
@@ -176,8 +152,7 @@ class PluginBase(abc.ABC):
         ignorecase: bool = False,
         **kwargs
     ):
-        kwargs.setdefault("type", DataType.ADDMSG)
-        kwargs.setdefault("addmsg_type", AddMsgType.TEXT)
+        kwargs.setdefault("event", EventType.TEXT)
         def decorator(func):
             from src.matcher.rule import fullmatch
             if not hasattr(func, '_event_handlers'):
@@ -194,8 +169,7 @@ class PluginBase(abc.ABC):
         rules: list["Rule"] = [],
         **kwargs
     ):
-        kwargs.setdefault("type", DataType.ADDMSG)
-        kwargs.setdefault("addmsg_type", AddMsgType.TEXT)
+        kwargs.setdefault("event", EventType.TEXT)
         def decorator(func):
             from src.matcher.rule import keyword
             if not hasattr(func, '_event_handlers'):
@@ -214,8 +188,7 @@ class PluginBase(abc.ABC):
         flags: int = 0,
         **kwargs
     ):
-        kwargs.setdefault("type", DataType.ADDMSG)
-        kwargs.setdefault("addmsg_type", AddMsgType.TEXT)
+        kwargs.setdefault("event", EventType.TEXT)
         def decorator(func):
             from src.matcher.rule import regex
             if not hasattr(func, '_event_handlers'):
@@ -231,8 +204,7 @@ class PluginBase(abc.ABC):
     
     @staticmethod
     def on_chatroom_decrease(**kwargs):
-        kwargs.setdefault("type", DataType.MODCONTACTS)
-        kwargs.setdefault("modcontact_type", ModContactType.MEMBER_DECREASED)
+        kwargs.setdefault("event", EventType.CHATROOM_DECREASE)
         def decorator(func):
             if not hasattr(func, '_event_handlers'):
                 func._event_handlers = []
@@ -244,8 +216,7 @@ class PluginBase(abc.ABC):
     
     @staticmethod
     def on_chatroom_increase(**kwargs):
-        kwargs.setdefault("type", DataType.MODCONTACTS)
-        kwargs.setdefault("modcontact_type", ModContactType.MEMBER_INCREASED)
+        kwargs.setdefault("event", EventType.CHATROOM_INCREASE)
         def decorator(func):
             if not hasattr(func, '_event_handlers'):
                 func._event_handlers = []
@@ -257,12 +228,12 @@ class PluginBase(abc.ABC):
     
     def register_matchers(self):
         """
-        注册所有用on装饰器装饰的方法到matcher系统
+        注册所有用on装饰器装饰的方法到matcher
         """
         from src.matcher.matcher import Matcher
         for func_name, func in inspect.getmembers(self.__class__, predicate=inspect.isfunction):
             if hasattr(func, '_event_handlers'):
                 for kwargs in func._event_handlers:
-                    # 将实例方法绑定到matcher系统
+                    # 将实例方法绑定到matc
                     bound_func = getattr(self, func_name)
-                    func.matcher = Matcher.new(bound_func, **kwargs)
+                    func.matcher = Matcher.new(handler=bound_func, **kwargs)

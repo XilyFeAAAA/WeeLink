@@ -1,4 +1,3 @@
-from src.error import HttpError
 from loguru import logger
 from urllib.parse import urlencode
 import aiohttp
@@ -12,7 +11,7 @@ async def post(url, *, json=True, body={}, query={}, headers={}) -> dict:
             return await response.json() if json else response
     except Exception as e:
         logger.error(f"http请求失败, 地址为{url}, 错误提示{e}")
-        raise e
+        raise
 
 
 async def get(url, *, json=True, query={}, headers={}):
@@ -24,4 +23,4 @@ async def get(url, *, json=True, query={}, headers={}):
             return await response.json() if json else response
     except Exception as e:
         logger.error(f"http请求失败, 地址为{url}, 错误提示{e}")
-        raise HttpError(e)
+        raise

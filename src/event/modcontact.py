@@ -1,4 +1,5 @@
-from src.model import Chatroom, ChatroomMember, ModContactType, DataType, Friend
+from src.model import Chatroom, ChatroomMember, ModContactType, EventType, Friend
+from src.matcher import Matcher
 from src.manager import cache
 from src.utils import logger
 
@@ -38,8 +39,6 @@ class ModContact:
         self.modcontact_type = None
         self.chatroom = chatroom
         self.friend = friend
-        # 数据类型
-        self.type = DataType.MODCONTACTS
 
 
     @classmethod
@@ -79,7 +78,7 @@ class ModContact:
                     description=description,
                     chatroom=cur,
                     friend=None)
-                return await cls.parse(past, cur)
+                await cls.process(past, cur)
             else:
                 # 如果没有缓存则更新
                 await cache.chatroom.update(username)
@@ -103,7 +102,7 @@ class ModContact:
                 #     description=description)
             else:
                 await cache.friend.update(username)
-        return
+        
         
 
 class ChatroomModify(ModContact):
@@ -113,7 +112,7 @@ class ChatroomModify(ModContact):
         self.decreased_members: list[ChatroomMember] = []
         self.increased_members: list[ChatroomMember] = []
         
-    async def parse(self, past_chatroom: Chatroom, cur_chatroom: Chatroom) -> "ChatroomModify":
+    async def process(self, past_chatroom: Chatroom, cur_chatroom: Chatroom) -> "ChatroomModify":
         """检查群聊变动"""
         # 检查群名称变更
         if past_chatroom.nickname != cur_chatroom.nickname:
@@ -133,14 +132,14 @@ class ChatroomModify(ModContact):
                 self.modcontact_type = ModContactType.MEMBER_DECREASED
                 self.decreased_members = [member for member in past_chatroom.member_list 
                                         if member.wxid in decreased_ids]
+                await Matcher.publish(event=EventType.CHATROOM_DECREASE, data=self)
             elif increased_ids := (cur_member_ids - past_member_ids):
                 self.modcontact_type = ModContactType.MEMBER_INCREASED
                 self.increased_members = [member for member in cur_chatroom.member_list 
                                         if member.wxid in increased_ids]
-            else:
-                return None
+                await Matcher.publish(event=EventType.CHATROOM_INCREASE, data=self)
+
         
-        return self
 
         
         
