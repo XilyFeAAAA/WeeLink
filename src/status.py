@@ -25,7 +25,7 @@ class StatusManager:
             "device_id": self.device_id
         }
         try:
-            if (await update_account(wxid=self.wxid, **update)) is None:
+            if not await update_account(wxid=self.wxid, **update):
                 await add_account(wxid=self.wxid, **update)
         except Exception as e:
             logger.error(f"保存账户信息错误：{e}")

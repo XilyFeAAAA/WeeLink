@@ -9,7 +9,7 @@ class ProtocolMixIn:
         max_retries = 3
         cnt_retry = 0
         while True:
-            logger.warning(f"正在连接协议: {cnt_retry}/{max_retries}")
+            logger.info(f"正在连接协议: {cnt_retry+1}/{max_retries}")
             try:
                 resp = await get(URL, json=False)
                 if resp.status in [200, 201, 401, 404]:

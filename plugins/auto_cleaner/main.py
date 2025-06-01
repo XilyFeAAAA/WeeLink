@@ -1,6 +1,6 @@
 from src.bot import Bot
 from src.plugin import PluginBase
-from src.utils import logger, Redis
+from src.utils import logger, redis
 import os
 
 
@@ -28,7 +28,6 @@ class AutoCleaner(PluginBase):
             logger.info("tmp目录不存在，无需清理")
             return
         
-        redis = Redis()
         to_del = []
         for fname in os.listdir(tmp_dir):
             if not await redis.exists(key=fname):

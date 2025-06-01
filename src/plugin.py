@@ -1,4 +1,4 @@
-from src.model import EventType
+from src.schema import EventType
 import abc
 import inspect
 
@@ -110,6 +110,18 @@ class PluginBase(abc.ABC):
     
     
     @staticmethod
+    def on_forward(**kwargs):
+        kwargs.setdefault("event", EventType.FORWARD)
+        def decorator(func):
+            if not hasattr(func, '_event_handlers'):
+                func._event_handlers = []
+                
+            func._event_handlers.append(kwargs)
+            return func
+        return decorator
+    
+    
+    @staticmethod
     def on_startswith(
         text: str,
         rules: list["Rule"] = [],
@@ -199,6 +211,53 @@ class PluginBase(abc.ABC):
             return func
         return decorator
     
+    
+    # XML 装饰器
+    
+    @staticmethod
+    def on_file(**kwargs):
+        kwargs.setdefault("event", EventType.FILE)
+        def decorator(func):
+            if not hasattr(func, '_event_handlers'):
+                func._event_handlers = []
+                
+            func._event_handlers.append(kwargs)
+            return func
+        return decorator
+    
+    
+    @staticmethod
+    def on_upload(**kwargs):
+        kwargs.setdefault("event", EventType.UPLOAD)
+        def decorator(func):
+            if not hasattr(func, '_event_handlers'):
+                func._event_handlers = []
+                
+            func._event_handlers.append(kwargs)
+            return func
+        return decorator
+    
+    @staticmethod
+    def on_quote(**kwargs):
+        kwargs.setdefault("event", EventType.QUOTE)
+        def decorator(func):
+            if not hasattr(func, '_event_handlers'):
+                func._event_handlers = []
+                
+            func._event_handlers.append(kwargs)
+            return func
+        return decorator
+    
+    @staticmethod
+    def on_link(**kwargs):
+        kwargs.setdefault("event", EventType.LINK)
+        def decorator(func):
+            if not hasattr(func, '_event_handlers'):
+                func._event_handlers = []
+                
+            func._event_handlers.append(kwargs)
+            return func
+        return decorator
     
     # ModContacts 装饰器
     

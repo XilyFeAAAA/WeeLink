@@ -1,7 +1,4 @@
-
 DELETE_TMP_INTERVAL: int = 120
-IMG_EXPIRE: int = 120
-VOICE_EXPIRE: int = 120
 MESSAGE_QUEUE: dict = {
     "enable": True,
     "interval": 2.0

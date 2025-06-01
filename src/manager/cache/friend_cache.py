@@ -1,4 +1,4 @@
-from src.model import Friend
+from src.schema import Friend
 from src.utils import logger
 from .cache import Cache
 import asyncio

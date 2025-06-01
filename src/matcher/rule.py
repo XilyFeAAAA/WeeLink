@@ -1,4 +1,4 @@
-from src.model import MessageSource
+from src.schema import MessageSource
 from typing_extensions import override
 import abc
 import re

@@ -1,4 +1,4 @@
-from src.model import Contact
+from src.schema import Contact
 from src.utils import logger
 from .cache import Cache
 import asyncio

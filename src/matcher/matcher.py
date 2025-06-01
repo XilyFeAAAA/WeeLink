@@ -1,4 +1,4 @@
-from src.model import AddMsgType, ModContactType, EventType
+from src.schema import AddMsgType, ModContactType, EventType
 from src.bot import Bot
 from .rule import Rule
 from datetime import datetime

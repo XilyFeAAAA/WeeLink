@@ -1,4 +1,4 @@
-from src.model import Chatroom, ChatroomMember, ModContactType, EventType, Friend
+from src.schema import Chatroom, ChatroomMember, ModContactType, EventType, Friend
 from src.matcher import Matcher
 from src.manager import cache
 from src.utils import logger
@@ -119,7 +119,7 @@ class ChatroomModify(ModContact):
             self.modcontact_type = ModContactType.NICKNAME_CHANGED
         # 检查群备注变更
         elif past_chatroom.remark != cur_chatroom.remark:
-            self.modcontact_type = ModContactType.REMARK_CHANGED
+            self.modcontact_type = ModContactType.REMARK_CHANGED    
         # 检查群主变更
         elif past_chatroom.chatroom_owner != cur_chatroom.chatroom_owner:
             self.modcontact_type = ModContactType.OWNER_CHANGED

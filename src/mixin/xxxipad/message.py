@@ -152,7 +152,6 @@ class MessageMixIn:
             "Type": type
         }
         resp = await post(f"{URL}/Msg/SendApp", body=param)
-        logger.debug(resp)
         if resp.get("Success") and (data := resp.get("Data", {})):
             logger.info(f"发送app消息: 对方wxid:{to_wxid} 类型:{type} ")
             return data.get("clientMsgId"), data.get("createTime"), data.get("newMsgId")

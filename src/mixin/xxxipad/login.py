@@ -25,8 +25,7 @@ class LoginMixIn:
             self.status.nickname = profile.get("NickName", {}).get("string", "")
             self.status.alias = profile.get("Alias", "")
             self.status.phone = profile.get("BindMobile", {}).get("string", "")
-        logger.info("设备登录成功")
-        logger.info(f"登录账号信息: wxid: {self.status.wxid}  昵称: {self.status.nickname} 微信号: {self.status.alias}  手机号: {self.status.phone}")     
+        logger.info(f"设备登录成功: wxid: {self.status.wxid}  昵称: {self.status.nickname} 微信号: {self.status.alias}  手机号: {self.status.phone}")     
         
         
     async def get_cached_info(self):

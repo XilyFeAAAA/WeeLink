@@ -19,7 +19,7 @@ async def add_account(wxid: str, uuid: str, nickname: str, alias: str,
             raise Exception(f"账户已存在: {wxid}")
         session.add(acc)
 
-async def update_account(wxid: str, **kwargs) -> Account:
+async def update_account(wxid: str, **kwargs) -> bool:
     """更新账户信息"""
     async with async_session.begin() as session:
         query = select(Account).where(Account.wxid == wxid)
@@ -27,12 +27,12 @@ async def update_account(wxid: str, **kwargs) -> Account:
         account = result.scalars().first()
         
         if not account:
-            return None
+            return False
         
         for key, value in kwargs.items():
             if hasattr(account, key):
                 setattr(account, key, value)
-        return account
+        return True
         
 
 async def delete_account(wxid: str) -> None:

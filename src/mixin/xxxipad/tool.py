@@ -9,7 +9,6 @@ class ToolMixIn:
     async def download_chunk_image(self, msg_id: str, to_wxid: str, 
                                    data_len: int, sta_pos: int, download_size: int) -> bytes:
         """分段下载图片"""
-        logger.debug(self.status)
         param = {
             "Wxid": self.status.wxid,
             "ToWxid": to_wxid,
@@ -80,13 +79,13 @@ class ToolMixIn:
             raise Exception(f"download_voice 接口错误")
 
 
-    async def download_attach(self, attach_id: str) -> dict:
+    async def download_file(self, attach_id: str) -> dict:
         """下载附件"""
         param = {
             "Wxid": self.status.wxid, 
             "AttachId": attach_id
         }
-        resp = await post(f"{URL}/Tools/DownloadAttach", body=param)
+        resp = await post(f"{URL}/Tools/DownloadFile", body=param)
         if resp.get("Success", False):
             return resp.get("Data", {}).get("data", {}).get("buffer")
         else:

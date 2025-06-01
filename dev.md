@@ -494,7 +494,7 @@ Echo插件演示了基本的消息处理：
 from src.message import TextMessage, VoiceMessage, ImageMessage
 from src.bot import Bot
 from src.plugin import PluginBase
-from src.model import MessageSource
+from src.schema import MessageSource
 from src.utils import logger
 
 

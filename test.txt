@@ -1,0 +1,175 @@
+<msg>
+    <appmsg appid="" sdkver="0">
+        <title>群聊的聊天记录</title>
+        <des>一去不回来: 文本消息
+一去不回来: [图片]
+一去不回来: [语音] 4"
+一去不回来: [视频]</des>
+        <action />
+        <type>19</type>
+        <showtype>0</showtype>
+        <soundtype>0</soundtype>
+        <mediatagname />
+        <messageext />
+        <messageaction />
+        <content />
+        <contentattr>0</contentattr>
+        <url />
+        <lowurl />
+        <dataurl />
+        <lowdataurl />
+        <songalbumurl />
+        <songlyric />
+        <template_id />
+        <appattach>
+            <totallen>0</totallen>
+            <attachid />
+            <emoticonmd5 />
+            <fileext />
+            <aeskey />
+        </appattach>
+        <extinfo />
+        <sourceusername />
+        <sourcedisplayname />
+        <thumburl />
+        <md5 />
+        <statextstr />
+        <recorditem><![CDATA[
+            <recordinfo>
+                <fromscene>0</fromscene>
+                <favcreatetime>1748781911</favcreatetime>
+                <isChatRoom>0</isChatRoom>
+                <title>群聊的聊天记录</title>
+                <desc>一去不回来: 文本消息
+一去不回来: [图片]
+一去不回来: [语音] 4"
+一去不回来: [视频]</desc>
+                <datalist count="6">
+                    <dataitem datatype="1" dataid="9563484e69098b5e1ac79ea8ab803ede" htmlid="9563484e69098b5e1ac79ea8ab803ede">
+                        <sourcename>一去不回来</sourcename>
+                        <sourceheadurl>https://wx.qlogo.cn/mmhead/ver_1/Ch4Eowyo5sHuQFvHz7WuqhfhWuLJLxlAAgia3zaMhlgGcriciahIibibT9QLPC66Xrz79g5uiaYn3V59iaRSia6w10ibXndW0unrVwqr36ZbOSoia41x4Bm02avVOatJULDfaRN1A4/132</sourceheadurl>
+                        <sourcetime>2025-06-01 20:43</sourcetime>
+                        <datadesc>文本消息</datadesc>
+                        <srcMsgLocalid>139</srcMsgLocalid>
+                        <srcMsgCreateTime>1748781785</srcMsgCreateTime>
+                        <fromnewmsgid>7826994323583287071</fromnewmsgid>
+                        <dataitemsource>
+                            <hashusername>8522c0c83379cfd879def26ab7658ba99004d495b379d43b49074ed34b9dde5f</hashusername>
+                        </dataitemsource>
+                    </dataitem>
+                    <dataitem datatype="2" dataid="7422aba5d4ced883221361676c276525" htmlid="7422aba5d4ced883221361676c276525">
+                        <datafmt>jpg</datafmt>
+                        <sourcename>一去不回来</sourcename>
+                        <sourceheadurl>https://wx.qlogo.cn/mmhead/ver_1/Ch4Eowyo5sHuQFvHz7WuqhfhWuLJLxlAAgia3zaMhlgGcriciahIibibT9QLPC66Xrz79g5uiaYn3V59iaRSia6w10ibXndW0unrVwqr36ZbOSoia41x4Bm02avVOatJULDfaRN1A4/132</sourceheadurl>
+                        <sourcetime>2025-06-01 20:43</sourcetime>
+                        <thumbsize>2141</thumbsize>
+                        <cdndataurl>3057020100044b304902010002047468d38002032f5aa90204909969710204683c4b58042435313832363932632d653830342d343236372d626135332d3331373363323861383133350204059420010201000405004c55cd00</cdndataurl>
+                        <cdndatakey>14cfe38b4b648eb7c416a193ae84291f</cdndatakey>
+                        <filetype>1</filetype>
+                        <thumbfiletype>1</thumbfiletype>
+                        <cdnthumburl>3057020100044b304902010002047468d38002032f5aa90204909969710204683c4b58042461333361326465612d376135302d343562612d396538342d3763356635386463663635610204059820010201000405004c54a100</cdnthumburl>
+                        <cdnthumbkey>45885de229304afebe5c573adfcd0d63</cdnthumbkey>
+                        <fullmd5>8370e6d5c1aac415102341bed8096dae</fullmd5>
+                        <thumbfullmd5>a195f73d036dfa2709d3b139108bb21f</thumbfullmd5>
+                        <datasize>3899</datasize>
+                        <srcMsgLocalid>140</srcMsgLocalid>
+                        <srcMsgCreateTime>1748781790</srcMsgCreateTime>
+                        <messageuuid>1e99d9e7eaba44617ecfee6ce6c0db5e_</messageuuid>
+                        <fromnewmsgid>3329115442072034514</fromnewmsgid>
+                        <dataitemsource>
+                            <hashusername>8522c0c83379cfd879def26ab7658ba99004d495b379d43b49074ed34b9dde5f</hashusername>
+                        </dataitemsource>
+                    </dataitem>
+                    <dataitem datatype="1" dataid="545de9e597e78ff32d97f3e51fa1ea7b" htmlid="545de9e597e78ff32d97f3e51fa1ea7b">
+                        <sourcename>一去不回来</sourcename>
+                        <sourceheadurl>https://wx.qlogo.cn/mmhead/ver_1/Ch4Eowyo5sHuQFvHz7WuqhfhWuLJLxlAAgia3zaMhlgGcriciahIibibT9QLPC66Xrz79g5uiaYn3V59iaRSia6w10ibXndW0unrVwqr36ZbOSoia41x4Bm02avVOatJULDfaRN1A4/132</sourceheadurl>
+                        <sourcetime>2025-06-01 20:43</sourcetime>
+                        <datadesc>[语音] 4"</datadesc>
+                        <srcMsgCreateTime>1748781813</srcMsgCreateTime>
+                        <dataitemsource>
+                            <hashusername>8522c0c83379cfd879def26ab7658ba99004d495b379d43b49074ed34b9dde5f</hashusername>
+                        </dataitemsource>
+                    </dataitem>
+                    <dataitem datatype="4" dataid="47c070051ccf1071d8fb3461d4c04ce4" htmlid="47c070051ccf1071d8fb3461d4c04ce4">
+                        <datafmt>.mp4</datafmt>
+                        <sourcename>一去不回来</sourcename>
+                        <sourceheadurl>https://wx.qlogo.cn/mmhead/ver_1/Ch4Eowyo5sHuQFvHz7WuqhfhWuLJLxlAAgia3zaMhlgGcriciahIibibT9QLPC66Xrz79g5uiaYn3V59iaRSia6w10ibXndW0unrVwqr36ZbOSoia41x4Bm02avVOatJULDfaRN1A4/132</sourceheadurl>
+                        <sourcetime>2025-06-01 20:43</sourcetime>
+                        <thumbsize>14560</thumbsize>
+                        <cdndataurl>3057020100044b304902010002047468d38002032f5aa90204dc9969710204683c4b00042435613136373530332d373164342d343033662d626662342d6662616662373339316265620204052408040201000405004c55cd00</cdndataurl>
+                        <cdndatakey>f9198b6130e3b8f274e70c05d19452d0</cdndatakey>
+                        <thumbfiletype>1</thumbfiletype>
+                        <cdnthumburl>3057020100044b304902010002047468d38002032f5aa90204909969710204683c4b58042465346638623533312d346535632d346536342d623861382d3664373236653738383031360204059820010201000405004c4d3500</cdnthumburl>
+                        <cdnthumbkey>f9198b6130e3b8f274e70c05d19452d0</cdnthumbkey>
+                        <datasourcepath>C:\Users\xilyfe\Documents\xwechat_files\wxid_80s2igjuvsn422_2b0f\msg\video\2025-06\f3a14d8cb08482185d1ad77344458623.mp4</datasourcepath>
+                        <fullmd5>e5c3118dfa6175a3013fe53c42c6e615</fullmd5>
+                        <thumbfullmd5>a012b2b1a48ed85cdb7c15e2b3cc761c</thumbfullmd5>
+                        <duration>4</duration>
+                        <srcMsgLocalid>142</srcMsgLocalid>
+                        <srcMsgCreateTime>1748781825</srcMsgCreateTime>
+                        <messageuuid>2c4a1c33633d997d5a0c8422c494eb00_</messageuuid>
+                        <fromnewmsgid>3738647290041195657</fromnewmsgid>
+                        <dataitemsource>
+                            <hashusername>8522c0c83379cfd879def26ab7658ba99004d495b379d43b49074ed34b9dde5f</hashusername>
+                        </dataitemsource>
+                    </dataitem>
+                    <dataitem datatype="1" dataid="03eea7e712ae862cb0416b7f4c8d64cd" htmlid="03eea7e712ae862cb0416b7f4c8d64cd">
+                        <sourcename>一去不回来</sourcename>
+                        <sourceheadurl>https://wx.qlogo.cn/mmhead/ver_1/Ch4Eowyo5sHuQFvHz7WuqhfhWuLJLxlAAgia3zaMhlgGcriciahIibibT9QLPC66Xrz79g5uiaYn3V59iaRSia6w10ibXndW0unrVwqr36ZbOSoia41x4Bm02avVOatJULDfaRN1A4/132</sourceheadurl>
+                        <sourcetime>2025-06-01 20:44</sourcetime>
+                        <datadesc>引用消息</datadesc>
+                        <srcMsgLocalid>143</srcMsgLocalid>
+                        <srcMsgCreateTime>1748781852</srcMsgCreateTime>
+                        <messageuuid>6ed410ae36f9f3d876a11ed8d4f909c0_</messageuuid>
+                        <fromnewmsgid>8831233933022898582</fromnewmsgid>
+                        <dataitemsource>
+                            <hashusername>8522c0c83379cfd879def26ab7658ba99004d495b379d43b49074ed34b9dde5f</hashusername>
+                        </dataitemsource>
+                        <refermsgitem>
+                            <content>文本消息</content>
+                            <svrid>7826994323583287071</svrid>
+                            <displayname>一去不回来</displayname>
+                            <type>1</type>
+                            <referdesc>一去不回来: 文本消息</referdesc>
+                        </refermsgitem>
+                    </dataitem>
+                    <dataitem datatype="5" dataid="0a66570c0b415635c7f39b7b1244e14c" htmlid="0a66570c0b415635c7f39b7b1244e14c">
+                        <link>http://mp.weixin.qq.com/s?__biz=MzUyMzc3NzI2Nw==&amp;mid=2247577932&amp;idx=1&amp;sn=936f5bc3df3907c63238afc259d3f0aa&amp;chksm=fb7642b12e6dce2420e4e68cc7a7cc0945fc775bf63db5f8dc9b8f6d83a324b1c86df4fca8a9&amp;mpshare=1&amp;scene=1&amp;srcid=0601XlhP09RDqTKZhMdwdNao&amp;sharer_shareinfo=6c6483e3dbbc4dad3963cfd8c51bcfd5&amp;sharer_shareinfo_first=6c6483e3dbbc4dad3963cfd8c51bcfd5#rd</link>
+                        <sourcename>一去不回来</sourcename>
+                        <sourceheadurl>https://wx.qlogo.cn/mmhead/ver_1/Ch4Eowyo5sHuQFvHz7WuqhfhWuLJLxlAAgia3zaMhlgGcriciahIibibT9QLPC66Xrz79g5uiaYn3V59iaRSia6w10ibXndW0unrVwqr36ZbOSoia41x4Bm02avVOatJULDfaRN1A4/132</sourceheadurl>
+                        <sourcetime>2025-06-01 20:44</sourcetime>
+                        <thumbsize>14309</thumbsize>
+                        <thumbfiletype>1</thumbfiletype>
+                        <cdnthumburl>3057020100044b304902010002047468d38002032f5aa90204909969710204683c4b58042431623137653366312d666365392d346431382d396362302d3363376436656138333034650204059420010201000405004c55cd00</cdnthumburl>
+                        <cdnthumbkey>9110d39a8a851e2ea3bec728a72a9658</cdnthumbkey>
+                        <thumbfullmd5>d2b95fb9a2251e9e9d22c8d2901df729</thumbfullmd5>
+                        <streamweburl>http://mp.weixin.qq.com/s?__biz=MzUyMzc3NzI2Nw==&amp;mid=2247577932&amp;idx=1&amp;sn=936f5bc3df3907c63238afc259d3f0aa&amp;chksm=fb7642b12e6dce2420e4e68cc7a7cc0945fc775bf63db5f8dc9b8f6d83a324b1c86df4fca8a9&amp;mpshare=1&amp;scene=1&amp;srcid=0601XlhP09RDqTKZhMdwdNao&amp;sharer_shareinfo=6c6483e3dbbc4dad3963cfd8c51bcfd5&amp;sharer_shareinfo_first=6c6483e3dbbc4dad3963cfd8c51bcfd5#rd</streamweburl>
+                        <srcMsgLocalid>144</srcMsgLocalid>
+                        <srcMsgCreateTime>1748781864</srcMsgCreateTime>
+                        <messageuuid>f4a7cc34eb0274605a499490dcd6bc8a_</messageuuid>
+                        <fromnewmsgid>439052653420357328</fromnewmsgid>
+                        <sourcedisplayname>灰灰考研</sourcedisplayname>
+                        <dataitemsource>
+                            <hashusername>8522c0c83379cfd879def26ab7658ba99004d495b379d43b49074ed34b9dde5f</hashusername>
+                        </dataitemsource>
+                        <weburlitem>
+                            <title>这下理解为啥要统考了吧</title>
+                            <url>http://mp.weixin.qq.com/s?__biz=MzUyMzc3NzI2Nw==&amp;mid=2247577932&amp;idx=1&amp;sn=936f5bc3df3907c63238afc259d3f0aa&amp;chksm=fb7642b12e6dce2420e4e68cc7a7cc0945fc775bf63db5f8dc9b8f6d83a324b1c86df4fca8a9&amp;mpshare=1&amp;scene=1&amp;srcid=0601XlhP09RDqTKZhMdwdNao&amp;sharer_shareinfo=6c6483e3dbbc4dad3963cfd8c51bcfd5&amp;sharer_shareinfo_first=6c6483e3dbbc4dad3963cfd8c51bcfd5#rd</url>
+                            <appmsgshareitem>
+                                <srcusername>gh_baa7303cfc5f</srcusername>
+                                <srcdisplayname>灰灰考研</srcdisplayname>
+                            </appmsgshareitem>
+                        </weburlitem>
+                    </dataitem>
+                </datalist>
+            </recordinfo>
+        ]]></recorditem>
+    </appmsg>
+    <fromusername>wxid_80s2igjuvsn422</fromusername>
+    <scene>0</scene>
+    <appinfo>
+        <version>1</version>
+        <appname />
+    </appinfo>
+    <commenturl />
+</msg>

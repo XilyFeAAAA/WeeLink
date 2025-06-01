@@ -1,42 +1,18 @@
 from src import config
 from src.utils import logger
 from redis import asyncio as aioredis
-from typing import AsyncGenerator, Optional
-
+from typing import AsyncGenerator
 
 class Redis:
     
-    _instance: Optional["Redis"] = None
-    
-    def __new__(cls) -> "Redis":
-        """单例 Redis"""
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-        return cls._instance
-    
-    def __init__(self) -> None:
-        self._redis = None
         
-
-    async def run(self) -> None:
-        """初始化 Redis"""
+    def __init__(self) -> None:
         host = config.REDIS_HOST
         port = config.REDIS_PORT
         if not host and not port:
             raise Exception("Redis 配置错误")
         self._redis = aioredis.Redis(host=host, port=port)
-        
-        try:
-            pong = await self._redis.ping()
-            if pong:
-                logger.info("Redis 连接成功")
-            else:
-                raise Exception("连接超时")
-        except Exception as e:
-            import sys
-            logger.error(f"Redis 连接错误: {e}")
-            sys.exit()
-            
+    
             
     async def close(self) -> None:
         try:
@@ -61,6 +37,8 @@ class Redis:
             return await self._redis.get(key, **kwargs)
         except Exception as e:
             logger.error(f"Redis 读取失败: {key}, 错误: {e}")
+            
+            logger.debug(self)
             raise
         
         
@@ -89,3 +67,5 @@ class Redis:
         except Exception as e:
             logger.error(f"Redis exists 检查失败: {key}, 错误: {e}")
             raise
+        
+redis = Redis()

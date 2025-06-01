@@ -4,7 +4,7 @@ from src.mixin import (
     UserMixIn, ChatroomMixIn, FriendMixIn, 
     ToolMixIn, PluginMixin, ScheduleMixin
 )
-from src.utils import logger, Redis, print_exc
+from src.utils import logger, redis, print_exc
 from src.status import StatusManager
 from typing import Optional
 import asyncio
@@ -23,7 +23,6 @@ class Bot(
 
     def __init__(self) -> None:
         super().__init__()
-        self.redis = Redis()
         self.status = StatusManager()
     
     
@@ -31,7 +30,6 @@ class Bot(
         """预加载机器人配置和插件"""
         self.start_schedule()
         self.use_queue()
-        await self.redis.run()
         await self.status.load()
         await self.load_plugin_from_dictionary()
         
@@ -70,7 +68,7 @@ class Bot(
         """销毁Bot实例，清理资源"""
         from src.event import MessageQueue
         self.stop_schedule()
-        await self.redis.close()
+        await redis.close()
         try:
             MessageQueue.get_instance().stop()
             logger.info("消息队列已关闭")
@@ -92,7 +90,6 @@ class Bot(
         failure_count = 0
         max_failures = 3
         async for data in self.message_generator():
-            
             if data is None:
                 failure_count += 1
                 if failure_count > max_failures:
