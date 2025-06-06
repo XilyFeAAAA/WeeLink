@@ -12,3 +12,6 @@ MYSQL_PORT: int = 3306
 MYSQL_USER: str = "root"
 MYSQL_PASSWORD: str = "123456"
 MYSQL_DB: str = "weelink"
+# Mongo DB
+MONGO_URI: str = "mongodb://localhost:27017"
+MONGO_DB_NAME: str = "WeeLink"

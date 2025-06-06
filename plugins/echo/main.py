@@ -16,7 +16,7 @@ class Echo(PluginBase):
 
     @PluginBase.on_text()
     async def echo_message(self, bot: Bot, msg: TextMessage):
-        logger.info(f"接受到{msg.from_wxid}文字消息,内容为{msg.text}")
+        logger.info(f"接受到{msg.from_wxid}文字消息,   内容为{msg.text}")
     
     
     @PluginBase.on_voice()

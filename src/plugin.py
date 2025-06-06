@@ -1,6 +1,5 @@
 from src.schema import EventType
 import abc
-import inspect
 
 
 class PluginBase(abc.ABC):
@@ -21,6 +20,12 @@ class PluginBase(abc.ABC):
     async def async_init(self, bot: "Bot"):
         """
         初始化插件的异步操作
+        """
+        return
+
+    async def async_cleanup(self, bot: "Bot"):
+        """
+        清理插件的异步操作
         """
         return
 
@@ -286,13 +291,17 @@ class PluginBase(abc.ABC):
     
     
     def register_matchers(self):
-        """
-        注册所有用on装饰器装饰的方法到matcher
-        """
+        """注册所有用on装饰器装饰的方法到matcher"""
         from src.matcher.matcher import Matcher
-        for func_name, func in inspect.getmembers(self.__class__, predicate=inspect.isfunction):
-            if hasattr(func, '_event_handlers'):
+        
+        for func_name in dir(self.__class__):
+            func = getattr(self.__class__, func_name)
+            if callable(func) and hasattr(func, "_event_handlers"):
+                # 获取实例方法
+                bound_func = getattr(self, func_name)
+                bound_func.matchers = {}
                 for kwargs in func._event_handlers:
-                    # 将实例方法绑定到matc
-                    bound_func = getattr(self, func_name)
-                    func.matcher = Matcher.new(handler=bound_func, **kwargs)
+                    bound_func.matchers.set Matcher.new(handler=bound_func, **kwargs)
+    
+    def destroy_matchers(self):
+        """卸载注册的matcher"""

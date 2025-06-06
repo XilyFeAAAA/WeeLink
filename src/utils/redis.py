@@ -17,7 +17,7 @@ class Redis:
     async def close(self) -> None:
         try:
             await self._redis.close()
-            logger.info("Redis 关闭成功")
+            logger.success("Redis 关闭成功")
         except Exception as e:
             logger.error(f"Redis 关闭失败: {e}")
                         

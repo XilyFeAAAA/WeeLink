@@ -1,4 +1,4 @@
-from src.db import update_account, add_account, get_all_accounts
+from src.db import AccountRepository
 from src.utils import logger
 import questionary
 
@@ -25,25 +25,28 @@ class StatusManager:
             "device_id": self.device_id
         }
         try:
-            if not await update_account(wxid=self.wxid, **update):
-                await add_account(wxid=self.wxid, **update)
+            await AccountRepository.update_account(wxid=self.wxid, update=update)
+            logger.success(f"保存账户信息成功")
         except Exception as e:
-            logger.error(f"保存账户信息错误：{e}")
-            raise
+            logger.error(f"保存账户信息错误：{e}。正在尝试创建新账户...")
+            try:
+                await AccountRepository.add_account(wxid=self.wxid, **update)
+                logger.success(f"创建新账户成功")
+            except Exception as e:
+                logger.error(f"创建新账户错误：{e}...")
         
 
     async def load(self):
         NEW_ACCOUNT_OPTION = "登录新账户"
         
         try:
-            accounts = await get_all_accounts()
+            accounts = await AccountRepository.get_all_accounts()
             if not accounts:
                 return
         except Exception as e:
             logger.error(f"读取账户信息错误：{e}")
             raise
         
-
         choices = [acc.nickname for acc in accounts] + [NEW_ACCOUNT_OPTION]
         
         selected_username = await questionary.select(

@@ -1,7 +1,6 @@
 import asyncio
 from src.bot import Bot
 from src.utils import logger
-from src.db.create import close_db_connection
 
 
 class ChatBotApplication:
@@ -18,15 +17,14 @@ class ChatBotApplication:
         await self.bot.check_protocol()
         await self.bot.login()
         await self.bot.keeplive()
-        logger.info("WeeLink 启动完成")
+        logger.success("WeeLink 启动完成")
 
 
     async def shutdown(self) -> None:
         """应用关闭"""
-        logger.info("WeeLink 正在关闭...")
+        logger.warning("WeeLink 正在关闭...")
         await self.bot.destroy()
-        await close_db_connection()
-        logger.info("WeeLink 已关闭")
+        logger.success("WeeLink 已关闭")
 
 
     async def run(self) -> None:
@@ -35,7 +33,7 @@ class ChatBotApplication:
             await self.startup()
             await self.bot.run()
         except (KeyboardInterrupt, asyncio.CancelledError):
-            logger.info("检测到 KeyboardInterrupt 退出信号")
+            pass
         finally:
             await self.shutdown()
 

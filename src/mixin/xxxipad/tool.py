@@ -27,6 +27,8 @@ class ToolMixIn:
 
             if isinstance(data, dict):
                 # 如果是字典，尝试获取buffer字段
+                if data.get("ret", -1) != 0:
+                    raise Exception(data.get("errMsg", {}).get("string", "未知错误"))
                 if "buffer" in data:
                     return base64.b64decode(data["buffer"])
                 elif "data" in data and isinstance(data["data"], dict) and "buffer" in data["data"]:
@@ -59,7 +61,7 @@ class ToolMixIn:
         }
         resp = await post(f"{URL}/Tools/CdnDownloadImage", body=param)
         if resp.get("Success", False):
-            return resp.get("Data")
+            return resp.get("Data").get("Image")
         else:
             raise Exception(f"download_cdn_image 接口错误")
                 

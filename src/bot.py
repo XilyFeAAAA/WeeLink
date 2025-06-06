@@ -6,6 +6,7 @@ from src.mixin import (
 )
 from src.utils import logger, redis, print_exc
 from src.status import StatusManager
+from src.db import db
 from typing import Optional
 import asyncio
 
@@ -22,16 +23,21 @@ class Bot(
     _lock = asyncio.Lock()
 
     def __init__(self) -> None:
-        super().__init__()
+        MessageMixIn.__init__(self)
+        ScheduleMixin.__init__(self)
+        PluginMixin.__init__(self)
+        
         self.status = StatusManager()
+        self.db = db
     
     
     async def preload(self) -> None:
         """预加载机器人配置和插件"""
         self.start_schedule()
         self.use_queue()
+        await self.db.connect()
         await self.status.load()
-        await self.load_plugin_from_dictionary()
+        await self.start_plugin()
         
         
     @classmethod
@@ -52,11 +58,11 @@ class Bot(
             if enable:
                 from src.event import MessageQueue
                 MessageQueue.get_instance(interval).start()
-                logger.info(f"消息队列已启动，全局发送间隔 {interval} 秒")
+                logger.success(f"消息队列已启动，全局发送间隔 {interval} 秒")
             else:
-                logger.info("消息队列已禁用，消息将立即发送")
+                logger.success("消息队列已禁用，消息将立即发送")
         except Exception as e:
-            logger.warning(f"初始化消息队列失败: {e}")
+            logger.error(f"初始化消息队列失败: {e}")
             
             
     async def keeplive(self) -> None:
@@ -69,13 +75,15 @@ class Bot(
         from src.event import MessageQueue
         self.stop_schedule()
         await redis.close()
+        await self.stop_plugin()
         try:
             MessageQueue.get_instance().stop()
-            logger.info("消息队列已关闭")
+            logger.success("消息队列已关闭")
         except Exception as e:
-            logger.warning(f"关闭消息队列时出错: {e}")
+            logger.error(f"关闭消息队列时出错: {e}")
             
         await self.status.save()
+        await self.db.close()
         
         
     async def run(self):

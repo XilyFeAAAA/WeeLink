@@ -14,17 +14,17 @@ class ScheduleMixin:
     def start_schedule(self):
         """启动 APScheduler"""
         self._schedule.start()
-        logger.info("任务调度器启动")
+        logger.success("任务调度器已启动")
     
     def pause_schedule(self):
         """暂停 APScheduler"""
         self._schedule.pause()
-        logger.info("任务调度器已暂停")
+        logger.success("任务调度器已暂停")
 
     def stop_schedule(self):
         """停止 APScheduler"""
         self._schedule.shutdown()
-        logger.info("任务调度器已停止")
+        logger.success("任务调度器已停止")
     
     
     def add_store(self, job_store: BaseJobStore) -> None:

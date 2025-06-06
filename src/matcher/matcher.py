@@ -9,10 +9,11 @@ import heapq
 
 class Matcher:
     
-    subscribers: dict[EventType, list[tuple[int, "Matcher"]]] = defaultdict(list)
+    subscribers: dict[EventType, list["Matcher"]] = defaultdict(list)
     
     def __init__(
         self,
+        event_type: EventType,
         rules: list[Rule],
         handler: callable,
         priority: int,
@@ -23,6 +24,7 @@ class Matcher:
         expire_time: datetime = None,
         extra_args: dict = None
     ):
+        self.event_type = event_type,
         self.addmsg_type = addmsg_type
         self.modcontact_type = modcontact_type
         self.rules = rules
@@ -33,11 +35,15 @@ class Matcher:
         self.expire_time = expire_time
         self.extra_args = extra_args or {}
     
-
+    def __lt__(self, other):
+        if not isinstance(other, Matcher):
+            return NotImplemented
+        return self.priority < other.priority
+    
     @classmethod
     def new(
         cls,
-        event: EventType,
+        event_type: EventType,
         handler: callable,
         addmsg_type: AddMsgType = AddMsgType.UNKNOWN,
         modcontact_type: ModContactType = ModContactType.UNKNOWN,
@@ -49,6 +55,7 @@ class Matcher:
         extra_args: dict = None,
     ):
         matcher = cls(
+            event_type=event_type,
             rules=rules, 
             handler=handler, 
             priority=priority, 
@@ -59,37 +66,33 @@ class Matcher:
             expire_time=expire_time, 
             extra_args=extra_args
         )
-        Matcher.subscribe(event, priority, matcher)
+        Matcher.subscribe(matcher)
         return matcher
-    
-    
-    # def update_priority(self, priority: int):
-    #     if priority == self.priority: return
-    #     Matcher.remove_matcher(self)
-    #     Matcher.add_matcher(priority, self)
-    
-    
+
+
     @classmethod
-    def subscribe(cls, event: EventType, priority: int, matcher: "Matcher"):
+    def subscribe(cls, matcher: "Matcher"):
         """发布订阅"""
-        heapq.heappush(cls.subscribers[event], (-priority, matcher))
+        heapq.heappush(cls.subscribers[matcher.event_type], matcher)
     
     
     @classmethod
-    def unsubscribe(cls, event: EventType, matcher: "Matcher"):
+    def unsubscribe(cls, matcher: "Matcher"):
         """取消订阅"""
-        cls.subscribers[event] = [
-            (p, m) for (p, m) in cls.subscribers[event] if m != matcher
-        ]
-        heapq.heapify(cls.subscribers[event])
+        matchers = cls.subscribers.get(matcher.event_type, [])
+        cls.subscribers[matcher.event_type] = [m for m in matchers if m != matcher]
+        heapq.heapify(cls.subscribers[matcher.event_type])
     
     
     @classmethod
-    async def publish(cls, event: EventType, data):
-        for _, matcher in sorted(cls.subscribers[event]):
+    async def publish(cls, event_type: EventType, data: any):
+        """发布事件"""
+        matchers = cls.subscribers.get(event_type, [])
+        for matcher in matchers:
             if await check_and_run_matcher(matcher, data) and matcher.block:
                 return
-        
+
+
     def __repr__(self):
         return (
             f"<Matcher handler={self.handler.__name__} "

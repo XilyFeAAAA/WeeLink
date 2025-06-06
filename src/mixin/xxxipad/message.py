@@ -44,6 +44,9 @@ class MessageMixIn:
         else:
             raise Exception(f"_send_text 接口错误")
 
+    async def send_image(self, to_wxid: str, base64: str):
+        self.queue.add_message(self._send_image, to_wxid, base64)
+
     async def _send_image(self, to_wxid: str, base64: str):
         """发送图片消息，base64为图片内容"""
         param = {
@@ -52,6 +55,7 @@ class MessageMixIn:
             "Wxid": self.status.wxid
         }
         resp = await post(f"{URL}/Msg/UploadImg", body=param)
+        logger.debug(resp)
         if resp.get("Success"):
             return resp.get("Data")
         else:

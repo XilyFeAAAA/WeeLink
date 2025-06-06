@@ -78,6 +78,15 @@ class AddMessage:
         return decorator
 
 
+    async def get_ats(self) -> list[ChatroomMember]:
+        """群内at,如果设置了群内昵称则会显示群内昵称displayName,否则为微信名nickName"""
+        root = ElementTree.fromstring(self.msg_source)
+        ats = root.find("atuserlist").text if root.find("atuserlist") is not None else ""
+        ats = ats.lstrip(",")
+        ats = ats.split(",") if ats else []
+        return [await cache.chatroom.get_member(at, self.from_wxid) for at in ats] 
+
+
     def _get_base_params(self):
         """获取基础参数，用于传递给子类构造函数"""
         return {
@@ -217,7 +226,6 @@ class SavableMessage:
             raise
 
 
-
 # 文字消息
 @AddMessage.register_type(AddMsgType.TEXT)
 class TextMessage(AddMessage):
@@ -234,13 +242,11 @@ class TextMessage(AddMessage):
         
         if self.source == MessageSource.CHATROOM:
             # 分割群聊消息发送人
-            sender_wxid, self.content = self.content.split(':\n')
+            if ":\n" in self.content:
+                sender_wxid, self.content = self.content.split(':\n', 1)
+                self.sender = await cache.chatroom.get_member(sender_wxid, self.chatroom.chatroom_id)
             # 去掉at信息，获得纯文本
             self.text = re.sub(r'@[^\u2005]*\u2005', '', self.content) if '\u2005' in self.content else self.content
-            # 获取发送人信息
-            if self.chatroom is None:
-                logger.error("chatroom为null")
-            self.sender = await cache.chatroom.get_member(sender_wxid, self.chatroom.chatroom_id)
             # 获取at信息
             self.ats = await self.get_ats()
             self.at_me = any(at.wxid == bot.status.wxid for at in self.ats)
@@ -248,14 +254,6 @@ class TextMessage(AddMessage):
             self.text = self.content
         
         return self
-
-    async def get_ats(self) -> list[ChatroomMember]:
-        """群内at,如果设置了群内昵称则会显示群内昵称displayName,否则为微信名nickName"""
-        root = ElementTree.fromstring(self.msg_source)
-        ats = root.find("atuserlist").text if root.find("atuserlist") is not None else ""
-        ats = ats.lstrip(",")
-        ats = ats.split(",") if ats else []
-        return [await cache.chatroom.get_member(at, self.from_wxid) for at in ats]
 
 
     def __repr__(self):
@@ -272,7 +270,7 @@ class AppMessage(AddMessage):
         """解析XML消息"""
         if self.source == MessageSource.CHATROOM:
             # 分割群聊消息发送人
-            sender_wxid, appmsg_xml = self.content.split(':\n')
+            sender_wxid, appmsg_xml = self.content.split(':\n', 1)
             # 获取发送人信息
             self.sender = await cache.chatroom.get_member(sender_wxid, self.chatroom.chatroom_id)
         elif self.source == MessageSource.FRIEND:
@@ -308,15 +306,23 @@ class QuoteMessage(AddMessage):
         self.quote_content: str
         self.quote_data: AddMessage
         self.event_type = EventType.QUOTE
-        
+
+    
     async def process(self, appmsg: ElementTree.Element):
         """解析引用消息"""
-        
-        self.quote_content = appmsg.findtext("title")
+        title = appmsg.findtext("title")
+        # 去掉at信息，获得纯文本
+        self.quote_content = re.sub(r'@[^\u2005]*\u2005', '', title) if '\u2005' in title else title
+        # 处理消息
+        if self.source == MessageSource.CHATROOM:
+            # 获取at信息
+            bot = await Bot.get_instance()
+            self.ats = await self.get_ats()
+            self.at_me = any(at.wxid == bot.status.wxid for at in self.ats)    
+            
         if refermsg := appmsg.find("refermsg"):
             msg_type = int(refermsg.findtext("type"))
             self.quote_type = AddMsgType(msg_type)
-            
             # 构建参数
             kwargs = {
                 "data": None,
@@ -329,9 +335,9 @@ class QuoteMessage(AddMessage):
                 "msg_id": 0,
                 "new_msg_id": 0,
                 "msg_seq": 0,
-                "chatroom": None,
+                "chatroom": self.chatroom if self.source == MessageSource.CHATROOM else None,
                 "sender": None,
-                "source": MessageSource.FRIEND
+                "source": self.source
             }
             # 处理文本引用
             if self.quote_type == AddMsgType.TEXT:
@@ -875,10 +881,13 @@ class ImageMessage(AddMessage, SavableMessage):
     async def process(self) -> "ImageMessage":
         """解析图片消息"""
         if self.source == MessageSource.CHATROOM:
-            # 分割群聊消息发送人
-            sender_wxid, img_xml = self.content.split(':\n')
-            # 获取发送人信息
-            self.sender = await cache.chatroom.get_member(sender_wxid, self.chatroom.chatroom_id)
+            # 群聊中，发送图片以wxid:xml开始
+            # 但是如果是引用图片，只有xml没有wxid:
+            if ':\n' in self.content:
+                sender_wxid, img_xml = self.content.split(':\n', 1)
+                self.sender = await cache.chatroom.get_member(sender_wxid, self.chatroom.chatroom_id)
+            else:
+                img_xml = self.content
         elif self.source == MessageSource.FRIEND:
             img_xml = self.content
         
@@ -909,7 +918,7 @@ class ImageMessage(AddMessage, SavableMessage):
                 data_len = int(self._img_length)
                 logger.debug("正在尝试分段下载图片")
                 
-                chunk_size = 5 * 1024 * 1024  # 5M
+                chunk_size = 512 * 1024  # 512KB
                 chunks = math.ceil(data_len / chunk_size)
                 image_data = bytearray()
                 for i in range(chunks):
@@ -926,7 +935,7 @@ class ImageMessage(AddMessage, SavableMessage):
                         image_data.extend(data)
                         logger.debug(f"图片分段{i+1}下载成功")
                     else:
-                        raise Exception("图片下载失败，返回数据为空")
+                        raise Exception("返回数据为空")
                 # 验证图片数据
                 try:
                     ImageFile.LOAD_TRUNCATED_IMAGES = True
@@ -938,13 +947,13 @@ class ImageMessage(AddMessage, SavableMessage):
                     # 验证失败，尝试CDN下载
                     if self._img_aeskey and self._img_cdnurl:
                         logger.warning("图片验证失败，尝试使用CDN下载...")
-                        img_data = await bot.download_cdn_image(self.aeskey, self.cdnmidimgurl)
+                        img_data = await bot.download_cdn_image(self._img_aeskey, self._img_cdnurl)
             except Exception as e:
                 logger.warning(f"图片分段下载错误: {e}，正在尝试CDN下载...")
-                img_data = await bot.download_cdn_image(self.aeskey, self.cdnmidimgurl)
-        elif self.aeskey and self.cdnmidimgurl:
+                img_data = await bot.download_cdn_image(self._img_aeskey, self._img_cdnurl)
+        elif self._img_aeskey and self._img_cdnurl:
             logger.warning("图片下载失败尝试使用CDN...")
-            img_data = await bot.download_cdn_image(self.aeskey, self.cdnmidimgurl)
+            img_data = await bot.download_cdn_image(self._img_aeskey, self._img_cdnurl)
                 
         # 处理CDN下载返回的base64字符串
         return base64.b64decode(img_data)
