@@ -1,0 +1,3 @@
+# temporary
+class Dashboard:
+    pass
