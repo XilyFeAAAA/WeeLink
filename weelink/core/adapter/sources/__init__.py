@@ -1,0 +1,1 @@
+from .wechatpad855.wechat855_adapter import WechatPad855Adapter

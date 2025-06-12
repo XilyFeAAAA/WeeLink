@@ -103,15 +103,15 @@ class ApiMixin:
 
         
         while True:
-            stat, data = await self.check_login(uuid)
+            stat, data = await self.api_check_login(uuid)
             if stat: break
             logger.info(f"等待登录中，过期倒计时：{data}")
             await asyncio.sleep(5)
 
         self.wxid = data.get("userName")
-        self.nickname = data.get("NickName")
-        self.alias = data.get("Alais")
-        self.phone = data.get("Mobile")
+        self.nickname = data.get("nickName")
+        self.alias = data.get("alias")
+        self.phone = data.get("bindMobile")
 
 
     async def api_check_login(self, uuid: str):
@@ -119,6 +119,7 @@ class ApiMixin:
             "uuid": uuid
         }
         resp = await post(f"{self.base_url}/Login/CheckQR", query=param)
+        logger.debug(resp)
         if resp.get("Success"):
             if resp.get("Data").get("acctSectResp", ""):
                 return True, resp.get("Data").get("acctSectResp")
@@ -523,14 +524,15 @@ class ApiMixin:
     async def get_chatroom(self, chatroom_id: str) -> Chatroom:
         if chatroom := await cache.get(cache_key=chatroom_id):
             return chatroom
-        chatroom_info = await self.api_get_chatroom_info(chatroom_id)
+        resp = await self.api_get_chatroom_info(chatroom_id)
         member_list = await self.api_get_chatroom_member(chatroom_id)
-        if chatroom_info is None:
+        if resp is None:
             raise RuntimeError(f"获取群聊{chatroom_id}信息失败: get_chatroom_info接口返回null")
-        elif chatroom_info.get("ContactCount", 0) != 1:
+        elif resp.get("ContactCount", 0) != 1:
             raise RuntimeError(f"获取群聊{chatroom_id}信息失败: ContactCount != 1")
         else:
             # 因为每次都只查询一个群聊，所以取[0]
+            chatroom = resp.get("ContactList", [])[0]
             return await cache.set(
                 cache_key=chatroom_id,
                 cache_data=Chatroom(
@@ -561,14 +563,14 @@ class ApiMixin:
             return friend
         if len(friends := await self.api_get_friend_info(wxid)) != 1: 
             raise RuntimeError(f"获取好友信息失败，错误提示:返回联系人数量为{len(friends)}")
-        
+        friend = friends[0]
         return await cache.set(
             cache_key=wxid,
             cache_data=Friend(
                 wxid=wxid,
-                nickname=friends[0].get("UserName", {}).get("string"),
-                avatar=friends[0].get("BigHeadImgUrl") or friends.get("SmallHeadImgUrl"),
-                remark=friends[0].get("Remark", {}).get("string"),
-                alias=friends[0].get("Alias"),
+                nickname=friend.get("UserName", {}).get("string"),
+                avatar=friend.get("BigHeadImgUrl") or friends.get("SmallHeadImgUrl"),
+                remark=friend.get("Remark", {}).get("string"),
+                alias=friend.get("Alias"),
             )
         )

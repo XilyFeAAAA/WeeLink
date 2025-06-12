@@ -26,7 +26,8 @@ class Cache:
         """设置Cache信息"""
         try:
             pickled_data = pickle.dumps(cache_data)
-            return await redis.set(key=cache_key, value=pickled_data, ex=self.cache_ttl)
+            await redis.set(key=cache_key, value=pickled_data, ex=self.cache_ttl)
+            return cache_data
         except Exception as e:
             logger.error(f"Cache设置key错误 - {str(e)}")
     

@@ -14,7 +14,7 @@ from xml.etree import ElementTree
 
 # local library
 from .api_mixin import ApiMixin
-from weelink.core.pubsub import broker, EventType
+from weelink.core.flow import get_broker, EventType
 from weelink.core.adapter import Adapter, registry_adapter
 from weelink.core.message import (
     Text, File, Link, Quote, MessageSource, MessageComponent, 
@@ -114,7 +114,7 @@ class WechatPad855Adapter(Adapter, ApiMixin):
         
         event = await self.convert_event(type, common_data, component)
         if event:
-            await broker.publish(event)
+            await get_broker().publish(event)
 
 
     async def extract_common_data(self, type: str, data: dict) -> dict:
@@ -504,6 +504,7 @@ class WechatPad855Adapter(Adapter, ApiMixin):
             # 创建并返回事件
             return MessageEvent(
                 adapter_obj=self,
+                adapter_cls=self.__class__,
                 **event_params
             )
         

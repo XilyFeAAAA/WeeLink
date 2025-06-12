@@ -6,7 +6,7 @@ import asyncio
 from .adapter import Adapter
 from .metadata import AdapterMetaData
 from .bot import Bot, BotConfig
-from weelink.core.utils import logger
+from weelink.core.utils import logger, print_exc
 from weelink.core.internal.db import BotRepository
 
 
@@ -90,6 +90,7 @@ class AdapterManager:
             await bot.adapter_obj.run()
         except Exception as e:
             logger.error(f"机器人{bot.id} 适配器{bot.adapter_metadata.name} 运行出错: {str(e)}")
+            print_exc(type(e), e, e.__traceback__)
         finally:
             bot.state = False
             await self._on_bot_terminated(bot)
@@ -130,8 +131,17 @@ class AdapterManager:
             await self.unload_bot(bot_id)
     
     
-    async def save_adapter(self) -> None:
-        pass
+    async def save_all_bots(self) -> None:
+        """保存全部bot信息，以便下次启动"""
+        bots = self.bots.copy()
+        for bot in bots.values():
+            try:
+                await BotRepository.update_bot(bot)
+            except Exception as e:
+                logger.error(
+                    f"机器人{bot.id}保存失败，注意信息是否保存"
+                )
+            
 
 
     def get_all_adapters(self) -> list[AdapterMetaData]:

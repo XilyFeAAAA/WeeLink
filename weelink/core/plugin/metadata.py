@@ -1,12 +1,10 @@
 # standard library
 import uuid
 from types import ModuleType
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 # local library
-from .plugin import Plugin
-from weelink.core.adapter import Adapter
-
+from .base import Plugin
 
 @dataclass
 class PluginMetaData:
@@ -26,8 +24,8 @@ class PluginMetaData:
     """插件模块"""
     module: ModuleType
     
-    """适配器"""
-    adapter: Adapter
+    """支持的适配器, 默认支持全部"""
+    adapters: list["Adapter"]
     
     """插件实例"""
     obj: Plugin
@@ -41,9 +39,9 @@ class PluginMetaData:
     """插件仓库"""
     repo: str = ""
     
-    
     """插件ID"""
     id: str = str(uuid.uuid4())
+    
     
     async def check_version(self):
         pass

@@ -59,62 +59,6 @@ class Contact:
     """公众号列表"""    
 
 
-@dataclass
-class Forward:
-    """转发基类"""
-    sourcename: str
-    sourceheadurl: str
-    sourcetime: str
-    datadesc: str
-
-
-@dataclass
-class VoiceForward(Forward):
-    """语音转发类"""
-    pass
-
-
-@dataclass
-class TextForward(Forward):
-    """文本转发类"""
-    fromnewmsgid: str
-    
-    
-@dataclass
-class MediaForward(Forward):
-    """媒体转发基类"""
-    datafmt: str      # 数据格式
-    cdndataurl: str   # CDN数据URL
-    cdndatakey: str   # CDN数据密钥
-    fullmd5: str      # 完整MD5值
-    datasize: str     # 数据大小
-
-
-@dataclass
-class ImageForward(MediaForward):
-    """图片转发数据"""
-    pass
-
-
-@dataclass
-class VideoForward(MediaForward):
-    """视频转发数据"""
-    pass
-
-
-@dataclass
-class QuoteForward(Forward):
-    """引用转发类"""
-    fromnewmsgid: str
-    refermsgitem: ElementTree.Element  # 目前还没想到优雅的办法解析引用
-
-
-@dataclass
-class LinkForward(Forward):
-    """链接转发类"""
-    sourcedisplayname: str
-    weburlitem: ElementTree.Element
-
 
 class DataType(Enum):
     TEST = auto()
@@ -182,14 +126,6 @@ __all__ = [
     "Friend", 
     "Chatroom", 
     "Contact",
-    "Forward", 
-    "VoiceForward", 
-    "TextForward", 
-    "MediaForward", 
-    "ImageForward", 
-    "VideoForward", 
-    "QuoteForward", 
-    "LinkForward",
     "DataType", 
     "AddMsgType", 
     "SystemMsgType", 

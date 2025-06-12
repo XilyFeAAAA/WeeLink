@@ -1,22 +1,22 @@
 # standard library
-import sys
 import time
 import asyncio
+import functools
 from pathlib import Path
 from typing import Awaitable
 from watchdog.observers import Observer
 from watchdog.events import DirModifiedEvent, FileModifiedEvent, FileSystemEventHandler
 
 # local library
-from .plugin import Plugin
+from .base import Plugin
+from .context import PluginContext
 from .metadata import PluginMetaData
-from weelink.core.utils import logger
 from weelink.core.adapter import Adapter
+from weelink.core.utils import logger, PLUGIN_DIR, print_exc
+from weelink.core.flow.registry import HandleRegistry
 
-
-""" id - PluginMetaData """
+""" module - PluginMetaData """
 plugins: dict[str, PluginMetaData] = {}
-plugin_dir = Path.cwd() / "data" / "plugins"
 
 
 def registry_plugin(
@@ -26,7 +26,7 @@ def registry_plugin(
     version: str,
     repo: str = None,
     enable: bool = True,
-    adapter: Adapter = None
+    adapters: list[Adapter] = []
 ) -> type[Plugin]:
     def decorator(cls: type[Plugin]) -> None:
         metadata = PluginMetaData(
@@ -36,38 +36,41 @@ def registry_plugin(
             version=version,
             desc=desc,
             repo=repo,
-            adapter=adapter,
-            module=None,
-            obj=None,
+            adapters=adapters,
+            module=cls.__module__,
             cls=cls,
+            obj=None
         )
-        plugins[metadata.id] = metadata
+        plugins[metadata.module] = metadata
     return decorator
 
 
 class PluginManager:
     
     def __init__(self) -> None:
+        self.modules = []
         self.observe = Observer()
-    
-    
+
+
     async def run(self) -> None:
         """启动插件系统"""
         try:
             loop = asyncio.get_running_loop()
             
-            if not plugin_dir.exists():
-                plugin_dir.mkdir(parents=True)
+            if not PLUGIN_DIR.exists():
+                PLUGIN_DIR.mkdir(parents=True)
             self.observe.schedule(PluginHandler(
                 loop=loop,
                 callback=self.hot_reload
-            ), plugin_dir, recursive=True)
+            ), PLUGIN_DIR, recursive=True)
             self.observe.start()
             logger.success("插件热重载已启动")
+            
             await self.load_all_plugins()
         except Exception as e:
             logger.critical(f"插件管理启动失败: {str(e)}")
-    
+
+
     async def terminate(self) -> None:
         """终止插件系统"""
         try:
@@ -75,18 +78,62 @@ class PluginManager:
             await self.unload_all_plugins()
         except Exception as e:
             logger.critical(f"插件管理终止失败: {str(e)}")
+
     
     async def hot_reload(self, src_path) -> None:
         """TODO"""
         pass
-    
-    
-    async def load_plugin(self) -> None:
-        pass
-    
+
+
+    async def load_plugin(self, module_path: Path) -> None:
+        """加载指定插件"""
+        module_name = module_path.name
+        logger.info(f"正在载入插件 {module_name}")
+        try:
+            module = __import__(module_path)
+        except (ModuleNotFoundError, ImportError):
+            await self.check_env(module_path)
+            module = __import__(module_path)
+        except Exception as e:
+            logger.error(f"插件 {module_name} 导入失败：{str(e)}")
+            return print_exc(type(e), e, e.__traceback__)
+            
+        plugin_metadate = plugins.get(module)
+        if plugin_metadate is None:
+            return logger.warning(f"插件 {module_name} 未注册元信息")
+        
+        if not plugin_metadate.enable:
+            return logger.warning(f"插件 {module_name} 处于禁用状态")
+        
+        # 实例化插件
+        plugin_metadate.obj = plugin_metadate.cls(
+            context=PluginContext()
+        )
+        
+        if hasattr(plugin_metadate.obj, "on_load"):
+            await plugin_metadate.obj.on_load()
+        
+        handlers = HandleRegistry.get_handlers_from_module(module)
+        for handler in handlers:
+            # 绑定方法 = 未绑定方法 + self
+            handler.callback = functools.partial(
+                handler.handler, plugin_metadate.obj
+            )
+            handler.plugin = plugin_metadate
+
     
     async def load_all_plugins(self) -> None:
-        pass
+        """加载全部插件"""
+        if not PLUGIN_DIR.exists():
+            PLUGIN_DIR.mkdir(parents=True)
+        
+        for module in PLUGIN_DIR.iterdir():
+            if not module.is_dir():
+                continue
+            if not (module / "__init__.py").exists():
+                logger.warning(f"插件 {module.name} 需要对外提供__init__.py文件，请通过DashBoard重新加载")
+                continue
+            await self.load_plugin(module)
     
     
     async def unload_plugin(self) -> None:
@@ -102,6 +149,14 @@ class PluginManager:
     
     
     async def update_plugin(self) -> None:
+        pass
+    
+    
+    async def install_plugin(self) -> None:
+        pass
+    
+    
+    async def uninstall_plugin(self) -> None:
         pass
 
 

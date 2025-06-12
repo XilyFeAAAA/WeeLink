@@ -10,7 +10,7 @@ DATA_DIR = ROOT_DIR / "data"
 # 日志目录
 LOGS_DIR = ROOT_DIR / "logs"
 # 插件目录
-PLUGIN_DIR = ROOT_DIR / "weelink" / "core" / "plugin"
+PLUGIN_DIR = DATA_DIR  / "plugins"
 # 适配器目录
 ADAPTER_DIR = ROOT_DIR / "weelink" / "core" / "adapter"
 # 临时文件目录
