@@ -1,0 +1,1 @@
+from weelink.core.on import *

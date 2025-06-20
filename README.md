@@ -1,39 +1,10 @@
-<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
-<a id="readme-top"></a>
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Don't forget to give the project a star!
-*** Thanks again! Now go create something AMAZING! :D
--->
-
-
-
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![Unlicense License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
-
-
-<!-- PROJECT LOGO -->
 <br />
 <div align="center">
   <h1 align="center">WeeLink</h1>
 
   <p align="center">
     一个强大的消息处理与插件系统框架
+    <br />
     <br />
     <a href="https://github.com/yourusername/WeeLink-db"><strong>查看文档 »</strong></a>
     <br />
@@ -60,23 +31,6 @@ WeeLink 是一个强大的消息处理与插件系统框架，旨在提供一个
 
 WeeLink 目前处于开发阶段，已完成核心功能的约1/3，包括基本的消息处理系统和插件架构。未来将继续开发 FastAPI 后端 API 和 Vue 前端界面。
 
-<p align="right">(<a href="#readme-top">返回顶部</a>)</p>
-
-
-
-### Built With
-
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-
-* [![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-* [![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
-* [![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)](https://redis.io/)
-* [![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
-* [![Vue.js](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D)](https://vuejs.org/)
-
-<p align="right">(<a href="#readme-top">返回顶部</a>)</p>
-
-
 
 <!-- GETTING STARTED -->
 ## 开始使用
@@ -90,8 +44,6 @@ This section should list any major frameworks/libraries used to bootstrap your p
 * Redis
 
 ### Installation
-
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
 
 1. 克隆仓库
    ```sh
@@ -115,8 +67,6 @@ _Below is an example of how you can instruct your audience on installing and set
    ```
 5. 配置数据库连接（待补充具体配置方法）
 
-<p align="right">(<a href="#readme-top">返回顶部</a>)</p>
-
 
 
 <!-- USAGE EXAMPLES -->
@@ -138,7 +88,6 @@ WeeLink 提供了强大的插件系统，您可以通过以下方式创建自己
 
 更多使用示例和文档将随项目开发进度更新。
 
-<p align="right">(<a href="#readme-top">返回顶部</a>)</p>
 
 
 
@@ -154,7 +103,6 @@ WeeLink 提供了强大的插件系统，您可以通过以下方式创建自己
 
 查看 [open issues](https://github.com/yourusername/WeeLink-db/issues) 了解提议的功能和已知问题。
 
-<p align="right">(<a href="#readme-top">返回顶部</a>)</p>
 
 
 
@@ -177,7 +125,6 @@ WeeLink 提供了强大的插件系统，您可以通过以下方式创建自己
   <img src="https://contrib.rocks/image?repo=xilyfeAAAA/WeeLink" alt="contrib.rocks image" />
 </a>
 
-<p align="right">(<a href="#readme-top">返回顶部</a>)</p>
 
 
 
@@ -186,31 +133,7 @@ WeeLink 提供了强大的插件系统，您可以通过以下方式创建自己
 
 根据 Unlicense 许可证分发。有关更多信息，请参阅 `LICENSE.txt`。
 
-<p align="right">(<a href="#readme-top">返回顶部</a>)</p>
 
-
-
-<!-- CONTACT -->
-## 联系方式
-
-您的姓名 - [@your_twitter](https://twitter.com/your_username) - email@example.com
-
-项目链接: [https://github.com/yourusername/WeeLink-db](https://github.com/yourusername/WeeLink-db)
-
-<p align="right">(<a href="#readme-top">返回顶部</a>)</p>
-
-
-
-<!-- ACKNOWLEDGMENTS -->
-## 致谢
-
-* [Python](https://www.python.org/)
-* [MongoDB](https://www.mongodb.com/)
-* [Redis](https://redis.io/)
-* [FastAPI](https://fastapi.tiangolo.com/)
-* [Vue.js](https://vuejs.org/)
-
-<p align="right">(<a href="#readme-top">返回顶部</a>)</p>
 
 
 
