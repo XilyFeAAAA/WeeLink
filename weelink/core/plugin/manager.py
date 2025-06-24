@@ -185,7 +185,7 @@ class PluginManager:
         except Exception as e:
             logger.error(f"插件 {plugin_name} on_Load回调执行失败: {e}")
         
-        handlers = HandleRegistry.get_handlers_from_plugin(plugin_md)
+        handlers = HandleRegistry.get_handlers_from_module(plugin_md.module)
         for handler in handlers:
             # 绑定方法 = 未绑定方法 + self
             handler.callback = functools.partial(
@@ -205,7 +205,7 @@ class PluginManager:
         
         # 插件配置保存
         md = self.enabled_plugins[plugin_name]
-        md.config.save_config()
+        md.config.save()
         
         # on_terminate        
         try:

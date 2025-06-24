@@ -19,27 +19,27 @@ class PluginConfig:
         self.config_path = CONFIG_DIR / f"{folder_name}_config.json"
         self.scheme_path = PLUGIN_DIR / folder_name / "scheme.json"
         
-        self.load_config()
+        self.load()
     
     
-    def create_config(self):
-        """根据scheme创建config"""
-        if not self.scheme_path.exists():
-            return logger.warning(f"插件 {self.folder_name} 配置模板不存在")
-        with open(self.scheme_path, "r", encoding='utf-8') as f:
-            self._scheme = json.load(f)
-        
-        config = { item["key"]: "" if item["type"] == "input" else item["default"] for item in self._scheme}
+    def create(self):
+        """根据scheme创建config"""        
+        config = { item["key"]: item["default"] for item in self._scheme}
         
         CONFIG_DIR.mkdir(parents=True, exist_ok=True)        
         with open(self.config_path, "w", encoding="utf-8") as f:
             json.dump(config, f, ensure_ascii=False, indent=4)
     
     
-    def load_config(self):
+    def load(self):
         """读取配置"""
+        if not self.scheme_path.exists():
+            return logger.warning(f"插件 {self.folder_name} 配置模板不存在")
+        with open(self.scheme_path, "r", encoding='utf-8') as f:
+            self._scheme = json.load(f)
+        
         if not self.config_path.exists():
-            self.create_config()
+            self.create()
     
         if self.config_path.exists():
             with open(self.config_path, "r", encoding='utf-8') as f:
@@ -48,12 +48,18 @@ class PluginConfig:
             logger.warning(f"插件 {self.folder_name} 配置读取失败")
     
     
-    def save_config(self) -> None:
+    def save(self) -> None:
         """保存插件配置"""
         CONFIG_DIR.mkdir(parents=True, exist_ok=True)        
         with open(self.config_path, "w", encoding="utf-8") as f:
             json.dump(self._conf, f, ensure_ascii=False, indent=4)
     
+    
+    def update(self, new_conf: dict):
+        """更新插件配置"""
+        for key, value in new_conf.items():
+            self._conf[key] = value
+        self.save()
     
     def __getitem__(self, key: str) -> any:
         """重写[]"""

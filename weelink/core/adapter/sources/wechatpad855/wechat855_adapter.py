@@ -495,14 +495,14 @@ class WechatPad855Adapter(Adapter, ApiMixin, DocsMixin):
                 event_params["source"] = MessageSource.CHATROOM
                 event_params["conversation"] = await self.get_chatroom(common_data["from_wxid"])
                 event_params["sender"] = await self.get_chatroom_member(
-                    chatroom_id=common_data["sender_wxid"], 
-                    wxid=event_params["conversation"].chatroom_id
+                    chatroom_id=event_params["conversation"].chatroom_id, 
+                    wxid=common_data["sender_wxid"]
                 )
                 
                 # 处理AT信息
                 at_members = []
                 for at_wxid in common_data["at_wxids"]:
-                    member = await self.get_chatroom_member(at_wxid, event_params["conversation"].chatroom_id)
+                    member = await self.get_chatroom_member(event_params["conversation"].chatroom_id, at_wxid)
                     if member:
                         at_members.append(member)
                 

@@ -34,8 +34,8 @@ class ApiMixin:
             else:
                 await self.api_qrcode_login(self.device_name, self.device_id)
         else:
-            self.nickname = profile.get("NickName", {}).get("string", ""),
-            self.alias = profile.get("Alias", ""),
+            self.nickname = profile.get("NickName", {}).get("string", "")
+            self.alias = profile.get("Alias", "")
             self.phone = profile.get("BindMobile", {}).get("string", "")
         logger.info(f"设备登录成功: 微信号: {self.wxid}  昵称: {self.nickname} 手机号: {self.phone}")     
 

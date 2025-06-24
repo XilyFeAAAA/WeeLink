@@ -38,7 +38,7 @@ class MiddlewareManager:
         }
     
     
-    def save_config(self) -> None:
+    def save(self) -> None:
         """保存配置项"""
 
         try:
@@ -137,7 +137,7 @@ class MiddlewareManager:
         
         # 如果已经处理完所有中间件，返回None
         if index >= len(enabled_middlewares):
-            return None
+            return event
         
         middleware = enabled_middlewares[index]
         
