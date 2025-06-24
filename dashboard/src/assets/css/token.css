@@ -1,0 +1,29 @@
+:root {
+    --bg-color: #F8F9FA;
+    --page-color: #EEF2F6;
+    --sidebar-bg: #FFFFFF;
+    --card-bg: #FFFFFF;
+    --primary-text: #212529;
+    --secondary-text: #6C757D;
+    --tertiary-text: #B0B0B2;
+    --text-color: #000;
+    --accent-color: #5141bb;
+    --border-color: #E2E2E2;
+    --shadow-color: rgba(0, 0, 0, 0.05);
+    --green: #28a745;
+    --red: #dc3545;
+
+    --chart-purple-dark: #635BFF;
+    --chart-purple-light: #9C9AFF;
+    --chart-blue: #57CCF4;
+    --chart-teal: #3CE0D3;
+    --chart-teal-light: #ADF2EE;
+
+    --btn-active-color: #ececec; 
+    --btn-hover-color: #faf7f7;
+
+
+    --header-height: 60px;
+    --sidebar-width: 280px;
+    --border-radius: 12px;
+}

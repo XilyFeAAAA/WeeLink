@@ -1,0 +1,1 @@
+from .config import conf, WEELINK_CONFIG_PATH

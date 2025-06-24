@@ -1,0 +1,81 @@
+@import "./fonts.css";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Poppins, sans-serif !important;
+    background-color: var(--bg);
+    color: var(--text);
+    width: 100vw;
+    height: 100vh;
+} 
+
+button {
+    outline: none;
+    border: none;
+}
+
+.view {
+    height: 100%;
+    width: 100%;
+    padding: 64px;
+    background-color: var(--page-color);
+    overflow-y: auto;
+}
+
+
+.text-button,
+.icon-button {
+    padding: 6px 12px;
+    background-color: #fff;
+    cursor:pointer;
+    border-radius: 6px;
+    transition: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+        background-color: #F6F6F6;
+    }
+
+    &:active {
+        background-color: #C0C0C0;
+    }
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    padding: 16px 24px;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #eaeaea;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+    height: 200px;
+    cursor: pointer;
+    user-select: none;
+    transition: box-shadow 0.15s ease;
+    
+}
+
+.card-body {
+    flex: 1;
+}
+
+
+.card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    div {
+        margin: 0 4px;
+    }
+}
+
+.card::hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}

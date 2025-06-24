@@ -1,0 +1,2 @@
+SECRET_KEY: str = "a8f2c2e9d0e04b9a994a87cb70a2e123df90d2393a9e2cc36"
+ALGORITHM: str = "HS256"
