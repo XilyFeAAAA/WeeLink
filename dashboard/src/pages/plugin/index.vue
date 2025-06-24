@@ -3,7 +3,7 @@
         <div class="plugin-header">
             <div class="plugin-title">
                 <div class="title-icon">
-                    <ExtensionFilledIcon size="40"/>
+                    <ExtensionFilledIcon size="40" />
                 </div>
                 <div>
                     <h1>已安装插件</h1>
@@ -34,15 +34,19 @@
         </div>
         <div class="plugin-main">
             <div class="grid-container" v-if="align == 'grid'">
-                <div class="card" v-for="(plugin, index) in pluginList" :key="index">
+                <div
+                    class="card"
+                    v-for="(plugin, index) in pluginList"
+                    :key="index"
+                >
                     <div class="card-header">
-                        <div class="plugin-author">
-                            {{ plugin.author }} /
-                        </div>
+                        <div class="plugin-author">{{ plugin.author }} /</div>
                         <t-switch
                             v-model="plugin.enable"
                             size="large"
-                            @click.stop="onSwitchPlugin(plugin.name, plugin.enable)"
+                            @click.stop="
+                                onSwitchPlugin(plugin.name, plugin.enable)
+                            "
                         />
                     </div>
                     <div class="card-body">
@@ -63,11 +67,13 @@
                             <LogoGithubFilledIcon />
                         </div>
                         <div class="text-button">文档</div>
-                        <div class="text-button">配置</div>
+                        <div class="text-button" @click="showConfigForm(plugin.name)">
+                            配置
+                        </div>
                         <div class="text-button">重载</div>
-                        <t-popconfirm 
-                            v-model="uninstallVisible" 
-                            theme="danger" 
+                        <t-popconfirm
+                            v-model="uninstallVisible"
+                            theme="danger"
                             content="请注意，删除插件无法恢复！"
                             @confirm="onUninstallPlugin(plugin.name)"
                         >
@@ -87,7 +93,23 @@
         :on-confirm="onComfirm"
     >
         <template #body>
-            <t-form :data="formData" label-align="top">
+            <t-form :data="configData" label-align="left">
+                <template v-if="!schemeFields">
+                    插件配置项为空
+                </template>
+                <template v-else>
+                    <t-form-item
+                        v-for="field in schemeFields"
+                        :key="field.key"
+                        :label="field.label"
+                    >
+                        <component
+                            :is="getFieldComponent(field)"
+                            v-model="configData[field.key]"
+                            v-bind="getFieldProps(field)"
+                        />
+                    </t-form-item>
+                </template>
             </t-form>
         </template>
     </t-dialog>
@@ -101,20 +123,46 @@ import {
     QuoteFilledIcon,
     ExtensionFilledIcon,
     GitBranchFilledIcon,
-    LogoGithubFilledIcon
+    LogoGithubFilledIcon,
 } from "tdesign-icons-vue-next";
 import request from "@/utils/request";
 
 // variables
-const formData = ref({})
-const schemeData = ref({})
-const configData = ref({})
-const visibleModal = ref(false)
-const uninstallVisible = ref(false)
+const activePlugin = ref(null)
+const configData = ref({});
+const schemeFields = ref({});
+const visibleModal = ref(false);
+const uninstallVisible = ref(false);
 const align = ref("grid");
 const pluginList = ref([]);
 
 // functions
+const showConfigForm = async (plugin_name) => {
+    await getPluginConfig(plugin_name);
+    visibleModal.value = true;
+    activePlugin.value = plugin_name;
+};
+const getPluginConfig = async (plugin_name) => {
+    const res = await request.get(`/plugin/config?plugin_name=${plugin_name}`);
+    configData.value = res.data.conf;
+    schemeFields.value = res.data.scheme;
+};
+const getFieldComponent = (field) => {
+    switch (field.type) {
+        case "string":
+            return "t-input";
+        case "boolean":
+            return "t-switch";
+    }
+};
+const getFieldProps = (field) => {
+    const props = {};
+    if (field.placeholder) props.placeholder = field.placeholder;
+    if (field.options && field.type === "select") {
+        props.options = field.options;
+    }
+    return props;
+};
 const getAllPlugins = async () => {
     const res = await request.get("/plugin/list");
     pluginList.value = res.data.plugins;
@@ -122,25 +170,31 @@ const getAllPlugins = async () => {
 const onSwitchPlugin = async (plugin_name, enable) => {
     await request.post("/plugin/switch", {
         plugin_name,
-        enable
-    })
-    await getAllPlugins()
-}
+        enable,
+    });
+    await getAllPlugins();
+};
 const onUninstallPlugin = async (plugin_name) => {
-    await request.post(`/plugin/uninstall?plugin_name=${plugin_name}`)
-    await getAllPlugins()
-}
+    await request.post(`/plugin/uninstall?plugin_name=${plugin_name}`);
+    await getAllPlugins();
+};
 const onReset = () => {
-    formData.value = {};
-    adapterSeleted.value = null;
+    configData.value = {};
+    schemeFields.value = null;
 };
 const onClose = () => {
+    activePlugin.value = null;
     visibleModal.value = false;
     onReset();
 };
 const onComfirm = async () => {
-    
-}
+    if (!configData.value) return
+    await request.post("/plugin/config", {
+        plugin_name: activePlugin.value,
+        conf: configData.value
+    })
+    onClose()
+};
 onMounted(async () => {
     await getAllPlugins();
 });
@@ -171,7 +225,7 @@ onMounted(async () => {
     display: flex;
     align-items: center;
     margin-top: 24px;
-    
+
     .search-bar {
         flex: 1;
         display: flex;
@@ -245,7 +299,7 @@ onMounted(async () => {
                 color: #666;
             }
         }
-        
+
         .card-body {
             .plugin-name {
                 margin-bottom: 6px;
@@ -263,6 +317,4 @@ onMounted(async () => {
         }
     }
 }
-
-
 </style>

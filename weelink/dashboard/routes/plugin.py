@@ -39,7 +39,7 @@ async def plugin_switch_api(
             conf.inactive_plugins.remove(plugin_name)
             conf.save()
         await linkhub.plugin.load_plugin(module_str)
-        await linkhub.plugin.enable_plugin(module_str)
+        await linkhub.plugin.enable_plugin(plugin_name)
     else:
         if plugin_name not in conf.inactive_plugins:
             conf.inactive_plugins.append(plugin_name)
@@ -75,6 +75,15 @@ async def plugin_get_config_api(
         "conf": conf
     }
 
+
+@router.post("/config", dependencies=[Depends(login_required)])
+async def plugin_post_config_api(
+    plugin_name: Annotated[str, Body()],
+    conf: Annotated[dict, Body()],
+    linkhub: Annotated[Linkhub, Depends(get_linkhub)]
+):
+    md: PluginMetaData = linkhub.plugin.get_one_plugin(plugin_name)
+    return md.config.update(conf)
 
 @router.post("/restart", dependencies=[Depends(login_required)])
 async def plugin_restart_api(
