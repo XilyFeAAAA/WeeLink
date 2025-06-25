@@ -38,7 +38,7 @@ async def _pre_examine(handler: HandlerMetaData, event: "MessageEvent") -> bool:
     if handler.plugin is None:
         raise Exception("HandlerMetaData的plugin参数为空，请检查日志")
     
-    if (accepted_adapters := handler.plugin.adapters) and event.adapter_cls not in accepted_adapters:
+    if (accepted_adapters := handler.plugin.adapters) and event.adapter_md.cls not in accepted_adapters:
         return False
     
     """规则检查"""

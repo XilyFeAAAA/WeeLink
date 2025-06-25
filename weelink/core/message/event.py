@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from .component import MessageComponent
 from .model import Chatroom, ChatroomMember, Friend
 from weelink.core.flow.event import EventType
-from weelink.core.adapter import Adapter, AdapterMetaData
+from weelink.core.adapter import AdapterMetaData
 
 
 
@@ -28,11 +28,8 @@ class MessageEvent:
     """消息会话"""
     conversation: Chatroom | Friend    
     
-    """适配器实例"""
-    adapter_obj: Adapter
-    
-    """适配器对象"""
-    adapter_cls: type[Adapter]
+    """适配器元信息"""
+    adapter_md: AdapterMetaData
     
     """原始数据"""
     data: dict

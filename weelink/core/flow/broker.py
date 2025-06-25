@@ -22,8 +22,6 @@ class MessageBroker:
     async def publish(self, event: "MessageEvent") -> None:    
         """发布事件，立即返回，实际处理在后台进行"""
         # 直接使用adapter_obj中的metadata属性
-        if hasattr(event.adapter_obj, 'metadata'):
-            event.adapter_metadata = event.adapter_obj.metadata
         
         task = asyncio.create_task(self._process_event(event))
         task.add_done_callback(self._background_tasks.discard)
