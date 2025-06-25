@@ -19,7 +19,10 @@ class Bot:
     create_time: int
     
     """状态"""
-    state: bool
+    is_running: bool
+    
+    """自启动"""
+    auto_start: bool
     
     """适配器元信息"""
     adapter_metadata: AdapterMetaData
@@ -43,9 +46,9 @@ class BotConfig:
     
     """机器人介绍"""
     desc: str
-
-    """机器人状态"""
-    state: bool
+    
+    """自启动"""
+    auto_start: bool
     
     """适配器名"""
     adapter_name: str

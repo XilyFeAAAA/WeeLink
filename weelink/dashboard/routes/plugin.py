@@ -20,7 +20,7 @@ async def plugin_list_api(linkhub: Annotated[Linkhub, Depends(get_linkhub)]):
             "version": plugin.version,
             "desc": plugin.desc,
             "repo": plugin.repo,
-            "enable": plugin.name not in conf.inactive_plugins
+            "enable": plugin.name not in conf["inactive_plugins"]
         } for plugin in linkhub.plugin.get_all_plugins()]
     }
 
@@ -35,14 +35,14 @@ async def plugin_switch_api(
     module_str = str(md.module)
     
     if enable:
-        if plugin_name in conf.inactive_plugins:
-            conf.inactive_plugins.remove(plugin_name)
+        if plugin_name in conf["inactive_plugins"]:
+            conf["inactive_plugins"].remove(plugin_name)
             conf.save()
         await linkhub.plugin.load_plugin(module_str)
         await linkhub.plugin.enable_plugin(plugin_name)
     else:
-        if plugin_name not in conf.inactive_plugins:
-            conf.inactive_plugins.append(plugin_name)
+        if plugin_name not in conf["inactive_plugins"]:
+            conf["inactive_plugins"].append(plugin_name)
             conf.save()
         await linkhub.plugin.disable_plugin(plugin_name)
 

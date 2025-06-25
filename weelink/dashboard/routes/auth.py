@@ -15,8 +15,8 @@ async def login_api(
     username: Annotated[str, Body()],
     password: Annotated[str, Body()]
 ):
-    if not (username == conf.DASHBOARD_USERNAME and \
-            password == conf.DASHBOARD_PASSWORD):
+    if not (username == conf["DASHBOARD_USERNAME"] and \
+            password == conf["DASHBOARD_PASSWORD"]):
         return HTTPException(status_code=401, detail="账号密码不匹配!")
     
     payload = {
@@ -33,9 +33,9 @@ async def reset_pwd_api(
     current_password: Annotated[str, Body()],
     new_password: Annotated[str, Body()]
 ):
-    if not current_password == conf.DASHBOARD_PASSWORD:
+    if not current_password == conf["DASHBOARD_PASSWORD"]:
         return HTTPException(status_code=401, detail="密码错误!")
     
     if not new_password:
         return HTTPException(status_code=500, detail="新密码不允许为空!")
-    conf.DASHBOARD_PASSWORD = new_password
+    conf["DASHBOARD_PASSWORD"] = new_password

@@ -7,7 +7,7 @@ class BotDocument(Document):
     """微信账户信息表"""
     alias: str
     desc: str
-    state: bool
+    auto_start: bool
     adapter_id: str
     adapter_name: str
     adapter_config: dict

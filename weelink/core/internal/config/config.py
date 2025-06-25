@@ -29,16 +29,16 @@ class WeelinkConfig(dict):
         self.update(conf)
 
 
-    def __getattr__(self, key: str):
+    def __getitem__(self, key: str):
         try:
-            return self[key]
+            return super().__getitem__(key)
         except KeyError:
             return None
 
 
-    def __setattr__(self, key, value):
+    def __setitem__(self, key, value):
         try:
-            self[key] = value
+            super().__setitem__(key, value)
             self.save()
         except:
             raise Exception(f"Key: '{key}' 不存在")

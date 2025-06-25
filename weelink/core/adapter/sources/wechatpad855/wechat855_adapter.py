@@ -516,8 +516,7 @@ class WechatPad855Adapter(Adapter, ApiMixin, DocsMixin):
             
             # 创建并返回事件
             return MessageEvent(
-                adapter_obj=self,
-                adapter_cls=self.__class__,
+                adapter_md=self.metadata,
                 **event_params
             )
         

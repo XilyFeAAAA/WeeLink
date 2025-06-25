@@ -8,6 +8,9 @@ class Adapter(abc.ABC):
 
     # 默认配置字段
     CONFIG_FIELDS = []
+    
+    # 适配器元数据
+    metadata = None
 
     @classmethod
     def get_config_fields(cls) -> list[dict]:
@@ -16,6 +19,8 @@ class Adapter(abc.ABC):
     
     @abc.abstractmethod
     def __init__(self, adapter_config: dict):
+        # 从类继承metadata属性
+        self.metadata = self.__class__.metadata
         raise NotImplementedError
 
 

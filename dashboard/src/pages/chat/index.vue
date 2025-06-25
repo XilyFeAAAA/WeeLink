@@ -45,9 +45,9 @@
                             {{ bot.alias }}
                         </div>
                         <t-switch
-                            v-model="bot.state"
+                            v-model="bot.is_running"
                             size="large"
-                            @click.stop="onSwitchBot(bot.id, bot.state)"
+                            @click.stop="onSwitchBot(bot.id, bot.is_running)"
                         />
                     </div>
                     <div class="card-body">
@@ -217,17 +217,17 @@ const onComfirm = async () => {
     await request.post("/bot/add", {
         alias: formData.value.alias,
         desc: formData.value.desc,
-        state: true,
+        is_running: true,
         adapter_name: adapterSeleted.value.name,
         adapter_id: adapterSeleted.value.id,
         adapter_config: configData.value,
     });
     await getAllBots()
 };
-const onSwitchBot = async (bot_id, state) => {
+const onSwitchBot = async (bot_id, is_running) => {
     await request.post("/bot/switch", {
         bot_id,
-        state
+        is_running
     })
     await getAllBots()
 }

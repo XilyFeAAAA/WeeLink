@@ -21,6 +21,8 @@ class MessageBroker:
     
     async def publish(self, event: "MessageEvent") -> None:    
         """发布事件，立即返回，实际处理在后台进行"""
+        # 直接使用adapter_obj中的metadata属性
+        
         task = asyncio.create_task(self._process_event(event))
         task.add_done_callback(self._background_tasks.discard)
         self._background_tasks.add(task)
@@ -34,7 +36,6 @@ class MessageBroker:
                 logger.debug(f"事件 {event.event_type} 被中间件过滤")
                 return
             
-            logger.debug(str(event))
             # 顺序执行处理器，遇到返回False则停止
             for handler in HandleRegistry.get_handlers_from_type(event.event_type):
                 try:

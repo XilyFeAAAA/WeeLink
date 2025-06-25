@@ -30,6 +30,8 @@ def registry_adapter(
             cls=cls
         )
         adapters[metadata.id] = metadata
+        # 设置适配器类的metadata属性
+        cls.metadata = metadata
         return cls
     return decorator
 
@@ -70,14 +72,15 @@ class AdapterManager:
             bot = Bot(
                 alias=bot_config.alias,
                 desc=bot_config.desc,
-                state=False,
+                is_running=False,
+                auto_start=bot_config.auto_start,
                 create_time=int(time.time()),
                 adapter_metadata=adapter_metadata, 
                 adapter_obj=adapter_cls(bot_config.adapter_config), 
                 adapter_config=bot_config.adapter_config
             )
             self.bots[bot.id] = bot
-            if bot.state:
+            if bot.auto_start:
                 await self.start_bot(bot.id)
         except Exception as e:
             logger.critical(f"机器人{bot_config.alias} 适配器{adapter_name} 启动失败: {str(e)}")
@@ -91,7 +94,7 @@ class AdapterManager:
             logger.error(f"机器人{bot.id} 适配器{bot.adapter_metadata.name} 运行出错: {str(e)}")
             # print_exc(type(e), e, e.__traceback__)
         finally:
-            bot.state = False
+            bot.is_running = False
             await self._on_bot_terminated(bot)
     
     
@@ -106,12 +109,13 @@ class AdapterManager:
             return logger.warning(f"机器人 - {bot_id} 不存在")
         
         bot = self.bots[bot_id]
-        # 创建运行任务并监控状态
-        if bot.state:
+        if bot.is_running:
             return
+        
+        # 创建运行任务并监控状态
         task = asyncio.create_task(self.run_and_monitor_bot(bot))
         self.bot_tasks[bot.id] = task
-        bot.state = True
+        bot.is_running = True
         logger.info(f"机器人 {bot.id} 适配器 {bot.adapter_metadata.name} 启动成功")
     
     
@@ -123,9 +127,8 @@ class AdapterManager:
         
         # 判断在不在运行
         bot = self.bots[bot_id]
-        if not (bot.state and bot_id in self.bot_tasks):
+        if not (bot.is_running and bot_id in self.bot_tasks):
             return
-        bot.state = False
         
         # 取出bot的run_and_monitor_bot任务
         task = self.bot_tasks.pop(bot_id)
@@ -137,6 +140,7 @@ class AdapterManager:
         
         try:
             await bot.adapter_obj.terminate()
+            bot.is_running = False
         except Exception as e:
             logger.error(f"终止机器人{bot.id}时出错: {str(e)}")
     
@@ -201,5 +205,5 @@ class AdapterManager:
     def get_bot_status(self, bot_id: str) -> bool:
         """获取指定机器人的状态"""
         if bot_id in self.bots:
-            return self.bots[bot_id].state
+            return self.bots[bot_id].is_running
         return False
