@@ -16,7 +16,7 @@ async def login_required(request: Request) -> str:
         payload: dict = jwt.decode(
             token, SECRET_KEY, algorithms=ALGORITHM
         )
-        if (usrname := payload.get("username")) != conf.DASHBOARD_USERNAME:
+        if (usrname := payload.get("username")) != conf["DASHBOARD_USERNAME"]:
             raise HTTPException(status_code=401, detail="JWT解析错误,请重新登录!")
         
         dt = datetime.datetime.utcnow().timestamp()
@@ -25,7 +25,6 @@ async def login_required(request: Request) -> str:
         
         return usrname
     except Exception as e:
-        print(e)
         raise HTTPException(status_code=401, detail="Token解析失败,请重新登录!")
 
 

@@ -1,6 +1,5 @@
 # standard library
 from pathlib import Path
-from enum import Enum, auto
 from dataclasses import dataclass
 
 # local library
@@ -9,7 +8,6 @@ from weelink.core.message import AddMsgType
 
 @dataclass
 class MessageComponent:
-    
     
     """消息时间"""
     create_time: int

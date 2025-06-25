@@ -162,7 +162,7 @@ class PluginManager:
             return logger.warning(f"插件 {plugin_name} 未注册插件元信息")
                 
         # 检查插件是否禁用
-        if plugin_name in conf.inactive_plugins:
+        if plugin_name in conf["inactive_plugins"]:
             return logger.warning(f"插件 {plugin_name} 处于禁用状态")
         
         # 判断是否已启用

@@ -50,7 +50,7 @@ class MessageEvent:
     ats: list[ChatroomMember] = field(default_factory=list)
     
     """消息ID"""
-    id: str = str(uuid.uuid4())
+    id: str = field(default_factory=lambda: str(uuid.uuid4()))
     
     def __repr__(self) -> str:
         return f"MessageEvent(id={self.id}, event_type={self.event_type}, adapter={self.adapter_obj.__class__.__name__})"

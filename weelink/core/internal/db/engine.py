@@ -19,9 +19,9 @@ class MongoDB:
     async def connect(self) -> None:
         """建立数据库连接并初始化Beanie"""
         try:
-            self.client = AsyncIOMotorClient(conf.MONGO_URI)
+            self.client = AsyncIOMotorClient(conf["MONGO_URI"])
             await self.client.server_info()
-            self.db = self.client[conf.MONGO_DB_NAME]
+            self.db = self.client[conf["MONGO_DB_NAME"]]
             
             await init_beanie(
                 database=self.db,

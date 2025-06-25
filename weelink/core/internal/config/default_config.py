@@ -29,5 +29,6 @@ DEFAULT_CONFIG = {
         "*"
     ],
     # Internal
-    "inactive_plugins": []
+    "inactive_plugins": [],
+    "inactive_middlewares": []
 }

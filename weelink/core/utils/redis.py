@@ -11,8 +11,8 @@ class Redis:
     
     
     def __init__(self) -> None:
-        self.host = conf.REDIS_HOST
-        self.port = conf.REDIS_PORT
+        self.host = conf["REDIS_HOST"]
+        self.port = conf["REDIS_PORT"]
     
     async def connect(self) -> None:
         if not self.host and not self.port:

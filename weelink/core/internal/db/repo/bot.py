@@ -12,7 +12,7 @@ class BotRepository:
         bot_doc = BotDocument(
             alias=bot_config.alias,
             desc=bot_config.desc,
-            state=bot_config.state,
+            auto_start=bot_config.auto_start,
             adapter_id=bot_config.adapter_id,
             adapter_name=bot_config.adapter_name,
             adapter_config=bot_config.adapter_config
@@ -24,7 +24,7 @@ class BotRepository:
         
         
     @staticmethod
-    async def update_bot(bot) -> None:
+    async def update_bot(bot: "Bot") -> None:
         """更新信息"""
         bot_doc = await BotDocument.find_one({"alias": bot.alias})
         if not bot_doc:
@@ -32,7 +32,7 @@ class BotRepository:
         
         update = {
             "desc": bot.desc,
-            "state": bot.state,
+            "auto_start": bot.auto_start,
             "adapter_name": bot.adapter_metadata.name,
             "adapter_config": bot.adapter_config
         }
