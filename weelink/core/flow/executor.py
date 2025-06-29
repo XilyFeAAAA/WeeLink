@@ -5,12 +5,13 @@ from typing import TYPE_CHECKING
 
 # local library
 from .metadata import HandlerMetaData
-# 避免循环导入
-from weelink.core.on.registry import HandleRegistry
 
 if TYPE_CHECKING:
-    from weelink.core.message import MessageEvent
-
+    from weelink.core.message.event import MessageEvent
+    from weelink.core.on.registry import HandleRegistry
+else:
+    # 运行时导入
+    from weelink.core.on.registry import HandleRegistry
 
 
 async def execute(handler: HandlerMetaData, event: "MessageEvent") -> bool:

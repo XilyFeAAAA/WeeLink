@@ -59,7 +59,7 @@ class Linkhub:
 
     async def stop(self) -> None:
         """结束Weelink的事件循环队列"""
-        for handler in HandleRegistry.get_handlers_from_type(EventType.STARTUP):
+        for handler in HandleRegistry.get_handlers_from_type(EventType.SHUTDOWN):
             try:
                 await handler.callback()
             except Exception as e:

@@ -1,18 +1,18 @@
 # standard library
 import os
 import sys
-import asyncio
+import json
 from loguru import logger
-from pathlib import Path
+from datetime import date
 
-# 获取项目根目录 - 使用当前工作目录
-root_dir = Path.cwd()
+# local library
+from .paths import LOGS_DIR
 
-# 日志目录
-log_dir = root_dir / "logs"
-os.makedirs(log_dir, exist_ok=True)
+# 确保目录存在
+os.makedirs(LOGS_DIR, exist_ok=True)
 
 
+# SSE管理器
 def queue_sink(message):
     from .sse import sse_manager
     
@@ -23,29 +23,68 @@ def queue_sink(message):
         'path': record['file'].path,
         'line': record['line'],
         'function': record['function'],
-        'time': record['time'].isoformat()
+        'time': record['time'].timestamp()
     })
 
-# loggers
-logger.remove()
-logger.add(
-    sys.stdout,
-    level="DEBUG",
-    format="<green>{time:HH:mm:ss}</green> | <level>{level: <8}</level> | {message}"
-)
-logger.add(
-    log_dir / "weelink_{time:YYYY-MM-DD}.log",
-    rotation="1 day",
-    retention="7 days",
-    compression="zip",
-    level="INFO",
-    encoding="utf-8",
-    enqueue=True,
-    backtrace=True,
-    diagnose=True
-)
-logger.add(queue_sink)
 
+class LoggerManager:
+    """日志管理器，提供日志配置和检索功能"""
+    
+    def __init__(self) -> None:
+        # 移除默认处理器
+        logger.remove()
+        
+        # 添加处理器
+        self.console_handler = logger.add(
+            sys.stdout,
+            level="DEBUG",
+            format="<green>{time:HH:mm:ss}</green> | <level>{level: <8}</level> | {message}"
+        )
+        
+        self.file_handler = logger.add(
+            LOGS_DIR / "weelink_{time:YYYY-MM-DD}.log",
+            rotation="1 day",
+            retention="7 days",
+            compression="zip",
+            level="INFO",
+            encoding="utf-8",
+            enqueue=True,
+            backtrace=True,
+            diagnose=True,
+            serialize=True
+        )
+        
+        self.sse_handler = logger.add(queue_sink)
+    
+    def get_today_logs(self):
+        """获取当日日志"""
+        today = date.today()
+        log_file = LOGS_DIR / f"weelink_{today.strftime('%Y-%m-%d')}.log"
+        
+        if not log_file.exists():
+            return []
+        
+        logs = []
+        try:
+            with open(log_file, "r", encoding="utf-8") as f:
+                for line in f:
+                    log_data = json.loads(line)
+                    record = log_data["record"]
+                    logs.append({
+                        'message': record['message'],
+                        'level': record['level']["name"],
+                        'path': record['file']["path"],
+                        'line': record['line'],
+                        'function': record['function'],
+                        'time': record['time']["timestamp"]
+                    })
+        except Exception as e:
+            logger.error(f"读取日志文件失败: {e}")
+        
+        return logs
+
+log_manager = LoggerManager()
 __all__ = [
-    "logger"
+    "logger",
+    "log_manager"
 ]

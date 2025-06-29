@@ -2,10 +2,10 @@
 import asyncio
 
 # local library
+from weelink.core.message.component import AddMessage
+from weelink.core.middleware.base import Middleware
 from weelink.core.internal.db import MessageRepository
 from weelink.core.utils import Context
-from weelink.core.message import MessageEvent, AddMessage
-from weelink.core.middleware.base import Middleware
 from weelink.core.middleware.manager import registry_middleware
 
 
@@ -16,7 +16,7 @@ from weelink.core.middleware.manager import registry_middleware
 class DBMiddleware(Middleware):
     """中间件基类"""
         
-    async def process(self, event: MessageEvent, context: Context, next_middleware: callable) -> any:
+    async def process(self, event: "MessageEvent", context: Context, next_middleware: callable) -> any:
         """中间件处理"""
         component = event.component
         if isinstance(component, AddMessage):
@@ -30,6 +30,6 @@ class DBMiddleware(Middleware):
         return await next_middleware()    
     
     
-    async def on_error(self, event: MessageEvent, context: Context, err: Exception) -> bool:
+    async def on_error(self, event: "MessageEvent", context: Context, err: Exception) -> bool:
         """错误响应"""
         return False

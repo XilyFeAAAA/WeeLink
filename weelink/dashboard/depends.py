@@ -11,7 +11,10 @@ from weelink.dashboard.constants import SECRET_KEY, ALGORITHM
 async def login_required(request: Request) -> str:
     """判断是否登录的依赖"""
     auth = request.headers.get("Authorization")
-    token = auth.removeprefix("Bearer").strip()
+    token = auth.removeprefix("Bearer")
+    if token is None:
+        raise HTTPException(status_code=401, detail="请求未附带Token,请重新登录!")
+    token = token.strip()
     try:
         payload: dict = jwt.decode(
             token, SECRET_KEY, algorithms=ALGORITHM

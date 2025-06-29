@@ -1,9 +1,9 @@
 # standard library
 from typing import Annotated
-from fastapi import APIRouter, Query, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 # local library
 from weelink.core.linkhub import Linkhub
-from weelink.core.internal.config import conf
+from weelink.core.utils import log_manager
 from weelink.dashboard.depends import login_required, get_linkhub
 
 router = APIRouter()
@@ -19,3 +19,10 @@ async def restart_linkhub_api(
     
     initiator = request.app.state.initiator
     return await initiator.restart_linkhub()
+
+
+@router.get("/logs", dependencies=[Depends(login_required)])
+async def logs_api():
+    return {
+        "logs": log_manager.get_today_logs()
+    }

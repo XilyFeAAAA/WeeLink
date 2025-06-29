@@ -1,7 +1,6 @@
 # local library
 from .base import Middleware
 from .metadata import MiddlewareMetaData
-from weelink.core.message import MessageEvent
 from weelink.core.utils import logger, Context
 from weelink.core.internal.config import conf
 
@@ -36,7 +35,7 @@ class MiddlewareManager:
         ]
     
     
-    async def process(self, event: MessageEvent) -> any:
+    async def process(self, event: "MessageEvent") -> any:
         """处理事件，依次通过所有启用的中间件"""
         try:
             # 创建中间件执行链
@@ -47,7 +46,7 @@ class MiddlewareManager:
     
     
     async def _create_middleware_chain(self, 
-            event: MessageEvent, context: Context, index: int = 0
+            event: "MessageEvent", context: Context, index: int = 0
     ) -> any:
         """递归创建中间件执行链"""
         # 如果已经处理完所有中间件，返回None
@@ -68,7 +67,7 @@ class MiddlewareManager:
     async def _execute_middleware(
         self, 
         middleware: Middleware, 
-        event: MessageEvent, 
+        event: "MessageEvent", 
         context: Context,
         next_middleware: callable
     ) -> any:

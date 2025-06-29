@@ -22,7 +22,7 @@ button {
 .view {
     height: 100%;
     width: 100%;
-    padding: 64px;
+    padding: 32px;
     background-color: var(--page-color);
     overflow-y: auto;
 }

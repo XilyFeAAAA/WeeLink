@@ -1,8 +1,9 @@
+import request from '@/utils/request'
 import { defineStore } from 'pinia'
 import { MessagePlugin } from 'tdesign-vue-next';
 
 
-export const useSSEStore = defineStore('sse', {
+export const useLogStore = defineStore('log', {
     state: () => ({
         token: localStorage.getItem('token') || '',
         logs: [],
@@ -11,6 +12,10 @@ export const useSSEStore = defineStore('sse', {
     }),
 
     actions: {
+        async getTodayLogs(){
+            const response = await request.get('/system/logs')
+            this.logs = response.data.logs.reverse()
+        },
         async connectSSE() {
             try {
                 this.abortController = new AbortController()
@@ -68,7 +73,7 @@ export const useSSEStore = defineStore('sse', {
                                 console.log("[HEARTBEAT]", payload);
                                 break;
                             case "log":
-                                this.logs.push(payload)
+                                this.logs.unshift(payload)
                                 break;
                             case "error":
                                 MessagePlugin.error(payload.message);

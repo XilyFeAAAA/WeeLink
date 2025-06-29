@@ -290,6 +290,7 @@ class ApiMixin:
             "Type": type
         }
         resp = await post(f"{self.base_url}/Msg/SendApp", body=param)
+        print(resp)
         if resp.get("Success") and (data := resp.get("Data", {})):
             return data.get("clientMsgId"), data.get("createTime"), data.get("newMsgId")
         else:

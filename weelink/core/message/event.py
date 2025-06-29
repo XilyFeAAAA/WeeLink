@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from .component import MessageComponent
 from .model import Chatroom, ChatroomMember, Friend
 from weelink.core.flow.event import EventType
-from weelink.core.adapter import AdapterMetaData
+from weelink.core.adapter import AdapterMetaData, Adapter
 
 
 
@@ -18,6 +18,7 @@ class MessageSource(Enum):
 
 @dataclass
 class MessageEvent:
+
     
     """消息来源"""
     source: MessageSource
@@ -42,6 +43,9 @@ class MessageEvent:
     
     """谁否被AT"""
     is_at: bool = False
+
+    """消息机器人"""
+    bot: Adapter = None
     
     """AT对象"""
     ats: list[ChatroomMember] = field(default_factory=list)

@@ -3,7 +3,6 @@ import abc
 
 # local library
 from weelink.core.utils import Context
-from weelink.core.message import MessageEvent
 
 
 class Middleware():
@@ -11,18 +10,18 @@ class Middleware():
         
     
     @abc.abstractmethod
-    async def process(self, event: MessageEvent, context: Context, next_middleware: callable) -> any:
+    async def process(self, event: "MessageEvent", context: Context, next_middleware: callable) -> any:
         raise NotImplementedError
     
     
-    async def before_process(self, event: MessageEvent, context: Context) -> None:
+    async def before_process(self, event: "MessageEvent", context: Context) -> None:
         pass
     
     
-    async def after_process(self, event: MessageEvent, context: Context, result: any) -> None:
+    async def after_process(self, event: "MessageEvent", context: Context, result: any) -> None:
         pass
     
     
-    async def on_error(self, event: MessageEvent, context: Context, err: Exception) -> bool:
+    async def on_error(self, event: "MessageEvent", context: Context, err: Exception) -> bool:
         raise NotImplementedError
     

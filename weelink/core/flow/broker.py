@@ -1,6 +1,5 @@
 # standard library
 import asyncio
-from typing import TYPE_CHECKING
 
 # local library
 from .executor import execute
@@ -8,8 +7,6 @@ from weelink.core.utils import logger
 from weelink.core.middleware import MiddlewareManager
 from weelink.core.on.registry import HandleRegistry
 
-if TYPE_CHECKING:
-    from weelink.core.message import MessageEvent
 
 
 class MessageBroker:
