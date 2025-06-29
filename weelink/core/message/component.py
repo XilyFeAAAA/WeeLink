@@ -3,7 +3,7 @@ from pathlib import Path
 from dataclasses import dataclass
 
 # local library
-from weelink.core.message import AddMsgType
+from weelink.core.message.model import AddMsgType
 
 
 @dataclass

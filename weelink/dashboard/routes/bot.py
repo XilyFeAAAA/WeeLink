@@ -43,13 +43,13 @@ async def bot_del_api(
 @router.post("/switch", dependencies=[Depends(login_required)])
 async def bot_switch_api(
     bot_id: Annotated[str, Body()],
-    state: Annotated[bool, Body()],
+    is_running: Annotated[bool, Body()],
     linkhub: Annotated[Linkhub, Depends(get_linkhub)]
 ):
     if (bot := linkhub.adapter.get_bot(bot_id)) is None:
         raise HTTPException(status_code=500, detail="bot_id 错误")
-    bot.auto_start = bot.is_running = state
-    if state:
+    bot.auto_start = is_running
+    if is_running:
         await linkhub.adapter.start_bot(bot_id)
     else:
         await linkhub.adapter.stop_bot(bot_id)

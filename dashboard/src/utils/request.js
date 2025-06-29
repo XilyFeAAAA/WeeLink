@@ -3,7 +3,7 @@ import { NotifyPlugin } from 'tdesign-vue-next';
 import { useAuthStore } from "@/store/auth";
 
 const request = axios.create({
-    baseURL: "http://0.0.0.0:7070/api"
+    baseURL: "http://127.0.0.1:7070/api"
 });
 
 // 请求拦截器

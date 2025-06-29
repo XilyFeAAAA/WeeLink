@@ -4,19 +4,20 @@
 
 
 <script setup>
-import { useSSEStore } from '@/store/sse'
+import { useLogStore } from '@/store/log'
 import { onMounted, onUnmounted } from 'vue'
 
 // variables
-const sseStore = useSSEStore()
+const logStore = useLogStore()
 
 // functions
 onMounted(async () => {
-    await sseStore.connectSSE()
+    await logStore.getTodayLogs()
+    await logStore.connectSSE()
 })
 
 onUnmounted(() => {
-    sseStore.disconnectSSE()
+    logStore.disconnectSSE()
 })
 </script>
 

@@ -3,8 +3,7 @@ import heapq
 from types import ModuleType
 from collections import defaultdict
 
-# local library
-from .rule import Rule
+# local librarye
 from weelink.core.flow.event import EventType
 from weelink.core.flow.metadata import HandlerMetaData
 
@@ -23,7 +22,7 @@ class HandleRegistry:
         callback: callable,
         module: str,
         event_type: EventType,
-        rule: Rule
+        rule: "Rule"
     ) -> HandlerMetaData:
         heapq.heappush(cls.handlers[event_type], HandlerMetaData(
             priority=priority,

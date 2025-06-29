@@ -4,8 +4,10 @@ import re
 from typing import TYPE_CHECKING
 
 # local library
+from weelink.core.message.component import Text
+from weelink.core.message.event import MessageSource
 if TYPE_CHECKING:
-    from weelink.core.message import MessageEvent, MessageSource, Text
+    from weelink.core.message.event import MessageEvent
 
 class RuleChecker(abc.ABC):
 

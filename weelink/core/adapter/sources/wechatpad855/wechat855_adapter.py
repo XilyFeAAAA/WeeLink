@@ -444,7 +444,8 @@ class WechatPad855Adapter(Adapter, ApiMixin, DocsMixin):
                             desc=appmsg.findtext('des', '').strip(),
                             url=appmsg.findtext('url', '').strip(),
                             username=appmsg.findtext('sourceusername', '').strip(),
-                            displayname=appmsg.findtext('sourcedisplayname', '').strip()
+                            displayname=appmsg.findtext('sourcedisplayname', '').strip(),
+                            **component_params
                         )
                     elif type == XmlType.UPLOAD:
                         return logger.warning("UPLOAD 类型 AppMessage 未适配")
@@ -517,6 +518,7 @@ class WechatPad855Adapter(Adapter, ApiMixin, DocsMixin):
             # 创建并返回事件
             return MessageEvent(
                 adapter_md=self.metadata,
+                bot=self,
                 **event_params
             )
         

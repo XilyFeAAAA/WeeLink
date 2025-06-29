@@ -63,7 +63,7 @@ class AdapterManager:
                 raise Exception(f"适配器 {adapter_name} 未设置文件路径，请在 Weelink/core/adapter/manager.py中配置")
 
         if not adapter_id in adapters:
-            raise Exception(f"适配器{adapter_id}不存在")
+            raise Exception(f"适配器 {adapter_id} 不存在")
 
         try:
             # 根据适配器元信息，构建Bot
@@ -83,7 +83,7 @@ class AdapterManager:
             if bot.auto_start:
                 await self.start_bot(bot.id)
         except Exception as e:
-            logger.critical(f"机器人{bot_config.alias} 适配器{adapter_name} 启动失败: {str(e)}")
+            logger.critical(f"机器人 {bot_config.alias} 适配器{adapter_name} 启动失败: {str(e)}")
     
     
     async def run_and_monitor_bot(self, bot: Bot) -> None:
@@ -91,7 +91,7 @@ class AdapterManager:
         try:
             await bot.adapter_obj.run()
         except Exception as e:
-            logger.error(f"机器人{bot.id} 适配器{bot.adapter_metadata.name} 运行出错: {str(e)}")
+            logger.error(f"机器人 {bot.id} 适配器{bot.adapter_metadata.name} 运行出错: {str(e)}")
             # print_exc(type(e), e, e.__traceback__)
         finally:
             bot.is_running = False
@@ -100,7 +100,7 @@ class AdapterManager:
     
     async def _on_bot_terminated(self, bot: Bot) -> None:
         """Bot终止时的回调函数"""
-        logger.warning(f"机器人{bot.id} 适配器{bot.adapter_metadata.name} 已停止运行")
+        logger.warning(f"机器人 {bot.id} 适配器{bot.adapter_metadata.name} 已停止运行")
     
     
     async def start_bot(self, bot_id: str) -> None:
@@ -172,7 +172,7 @@ class AdapterManager:
                 await BotRepository.update_bot(bot)
             except Exception as e:
                 logger.error(
-                    f"机器人{bot.id}保存失败，注意信息是否保存"
+                    f"机器人 {bot.id} 保存失败，注意信息是否保存"
                 )
 
 

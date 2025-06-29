@@ -2,11 +2,7 @@
     <div class="aside" :class="{ collapsed: isCollapsed }">
         <div class="aside-header">
             <a href="#" class="logo">
-                <img 
-                    style="height:30px;margin-right:15px"
-                    src="@/assets/images/designer-icon-w.svg"
-                >
-                <span>Nexus</span>
+                <span>WeeLink</span>
             </a>
             <button class="toggle-btn" @click="onCollapse">
                 <ChevronLeftDoubleSIcon size="20"/>
@@ -57,7 +53,7 @@
         LayersFilledIcon,
         StoreFilledIcon,
         SystemSettingFilledIcon,
-        TerminalRectangleFilledIcon,
+        SystemLogFilledIcon,
         DataBaseFilledIcon,
         InfoCircleFilledIcon
     } from "tdesign-icons-vue-next"
@@ -107,9 +103,9 @@
             route: "/config"
         },
         {
-            title: "终端",
-            icon: TerminalRectangleFilledIcon,
-            route: "/terminal"
+            title: "日志",
+            icon: SystemLogFilledIcon,
+            route: "/log"
         },
         {
             title: "关于",
@@ -143,6 +139,10 @@
         background-color: var(--sidebar-bg);
         transition: all 0.3s ease-in-out;
         user-select: none;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
         .aside-header {
             display: flex;
             justify-content: space-between;
@@ -178,6 +178,7 @@
             padding: 8px 16px;
             flex-grow: 1;
             flex-grow: 1;
+            overflow-x: hidden;
             overflow-y: auto;
 
             ul {
@@ -207,9 +208,6 @@
                             display: flex;
                             align-items: center;
                             margin-left: 25px;
-                            white-space: nowrap;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
                             color: rgba(0, 0, 0, 0.87);
                             font-size: 14px;
                         }

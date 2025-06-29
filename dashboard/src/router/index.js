@@ -32,9 +32,9 @@ const routes = [
                 name: 'plugin'
             },
             {
-                path: '/terminal',
-                component: () => import('@/pages/terminal/index.vue'),
-                name: 'terminal',
+                path: '/log',
+                component: () => import('@/pages/log/index.vue'),
+                name: 'log',
                 meta: { keepAlive: true }
             },
             {
