@@ -22,6 +22,9 @@ class DBMiddleware(Middleware):
         if isinstance(component, AddMessage):
             asyncio.create_task(MessageRepository.add_message(
                 adapter_name=event.adapter_md.name,
+                source=event.source.value,
+                content=str(component),
+                fromname=event.conversation.name,
                 msg_id=component.msg_id,
                 new_msg_id=component.new_msg_id,
                 data=event.data

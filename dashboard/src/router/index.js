@@ -26,7 +26,12 @@ const routes = [
                 component: () => import('@/pages/adapter/index.vue'),
                 name: 'adapter'
             },
-                        {
+            {
+                path: '/database',
+                component: () => import('@/pages/database/index.vue'),
+                name: 'database'
+            },
+            {
                 path: '/plugin',
                 component: () => import('@/pages/plugin/index.vue'),
                 name: 'plugin'

@@ -32,7 +32,7 @@ class Friend:
     
     @property
     def name(self) -> str:
-        return self.nickname or self.wxid or "未知好友"
+        return self.nickname or self.alias or self.wxid or "未知好友"
 
 
 @dataclass

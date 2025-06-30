@@ -62,5 +62,6 @@ onMounted(async () => {
 .about-body {
     background-color: #fff;
     padding: 32px 64px;
+    border-radius: 4px;
 }
 </style>

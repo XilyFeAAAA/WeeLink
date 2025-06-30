@@ -10,10 +10,10 @@ from weelink.core.adapter import AdapterMetaData, Adapter
 
 
 
-class MessageSource(Enum):
-    CHATROOM = auto()
-    FRIEND = auto()
-    SYSTEM = auto()
+class MessageSource(str, Enum):
+    CHATROOM = "chatroom"
+    FRIEND = "friend"
+    SYSTEM = "system"
 
 
 @dataclass

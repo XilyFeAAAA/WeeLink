@@ -40,6 +40,9 @@ class Text(AddMessage):
     
     """处理后的消息文本"""
     text: str
+    
+    def __str__(self) -> str:
+        return self.text
 
 
 @dataclass
@@ -53,6 +56,9 @@ class File(AddMessage):
     
     """文件扩展名"""
     ext: str
+    
+    def __str__(self) -> str:
+        return f"{self.md5}.{self.ext}"
 
 
 @dataclass
@@ -77,6 +83,9 @@ class Link(AddMessage):
     
     """链接展示名"""
     displayname: str
+    
+    def __str__(self) -> str:
+        return f"{self.title}"
 
 
 @dataclass
@@ -90,6 +99,9 @@ class Quote(AddMessage):
     
     """引用内容(组件)"""
     component: MessageComponent
+    
+    def __str__(self) -> str:
+        return f"{self.title} {str(self.component)}"
 
 
 @dataclass

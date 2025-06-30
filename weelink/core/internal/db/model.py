@@ -1,6 +1,4 @@
 from beanie import Document
-from pymongo import IndexModel, ASCENDING
-from typing import Optional
 
     
 class BotDocument(Document):
@@ -21,6 +19,9 @@ class MessageDocument(Document):
     new_msg_id: int
     data: dict
     adapter_name: str
+    source: str
+    content: str
+    fromname: str
     
     class Settings:
         name = "message"
