@@ -56,6 +56,7 @@
                                 :columns="columns"
                                 hover
                                 size="small"
+                                :height="calculatedHeight"
                                 show-header
                                 cell-empty-content="-"
                             >
@@ -86,7 +87,7 @@
     </div>
 </template>
 <script lang="jsx" setup>
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, computed, onBeforeUnmount } from "vue";
 import { DataBaseFilledIcon, SearchIcon, FilterClearIcon, DeleteIcon } from "tdesign-icons-vue-next";
 import { timestamp_format } from '@/utils/time'
 import request from "@/utils/request";
@@ -96,6 +97,7 @@ const data = ref([])
 const adapter = ref(null)
 const source = ref(null)
 const keyword = ref(null)
+const winHeight = ref(window.innerHeight)
 const value = ref("first");
 const adapterOptions = ref([])
 const pagination = reactive({
@@ -126,6 +128,10 @@ const columns = ref([
     },
     { colKey: 'operation', title: '操作', width: "100"}
 ]);
+
+const calculatedHeight = computed(() => {
+    return Math.max(winHeight.value - 415, 100)
+})
 // functions
 const getDatabaseData = async () => {
     let url = `/db/mongodb?page=${pagination.current}&limit=${pagination.limit}`
@@ -159,12 +165,19 @@ const onReset = async () => {
     keyword.value = null
     await getDatabaseData()
 }
+const updateHeight = () => {
+    winHeight.value = window.innerHeight
+}
 onMounted(async () => {
+    window.addEventListener('resize', updateHeight)
     await getAllAdapters()
     await getDatabaseData()
 })
+onBeforeUnmount(() => {
+    window.removeEventListener('resize', updateHeight)
+})
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .database-header {
     margin-bottom: 24px;
     .database-title {
@@ -213,5 +226,9 @@ onMounted(async () => {
 }
 .tabs-icon-margin {
     margin-right: 4px;
+}
+tbody {
+    height: 100px;
+    overflow: auto;
 }
 </style>
