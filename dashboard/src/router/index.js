@@ -37,6 +37,11 @@ const routes = [
                 name: 'plugin'
             },
             {
+                path: '/config',
+                component: () => import('@/pages/config/index.vue'),
+                name: 'config'
+            },
+            {
                 path: '/log',
                 component: () => import('@/pages/log/index.vue'),
                 name: 'log',

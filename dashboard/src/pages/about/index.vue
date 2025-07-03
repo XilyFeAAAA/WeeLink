@@ -1,16 +1,5 @@
 <template>
     <div class="about-container view">
-        <div class="about-header">
-            <div class="about-title">
-                <div class="title-icon">
-                    <InfoCircleFilledIcon size="40"/>
-                </div>
-                <div>
-                    <h1>关于</h1>
-                    <p>关于本项目</p>
-                </div>
-            </div>
-        </div>
         <div class="about-body">
             <Markdown :markdown="markdown"></Markdown>
         </div>

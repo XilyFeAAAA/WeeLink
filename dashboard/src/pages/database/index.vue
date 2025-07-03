@@ -1,6 +1,6 @@
 <template>
     <div class="database-container view">
-        <div class="database-header">
+        <!-- <div class="database-header">
             <div class="database-title">
                 <div class="title-icon">
                     <DataBaseFilledIcon size="40" />
@@ -10,7 +10,7 @@
                     <p>管理系统缓存信息和数据库数据</p>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="database-body">
             <t-tabs :value="value">
                 <t-tab-panel value="first" label="Mongodb 数据库">
@@ -130,7 +130,7 @@ const columns = ref([
 ]);
 
 const calculatedHeight = computed(() => {
-    return Math.max(winHeight.value - 415, 100)
+    return Math.max(winHeight.value - 335, 100)
 })
 // functions
 const getDatabaseData = async () => {
