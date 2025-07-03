@@ -1,6 +1,6 @@
 <template>
     <div class="adapter-container view">
-        <div class="adapter-header">
+        <!-- <div class="adapter-header">
             <div class="adapter-title">
                 <div class="title-icon">
                     <LayersFilledIcon size="40"/>
@@ -10,7 +10,7 @@
                     <p>管理不同适配器，连接到不同的微信协议</p>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="adapter-tool">
             <div class="search-bar">
                 <SearchIcon />
@@ -135,7 +135,6 @@ onMounted(async () => {
 .adapter-tool {
     display: flex;
     align-items: center;
-    margin-top: 24px;
     .search-bar {
         flex: 1;
         display: flex;

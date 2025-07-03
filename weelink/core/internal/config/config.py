@@ -4,17 +4,17 @@ from pathlib import Path
 
 # local library
 from .default_config import DEFAULT_CONFIG
+from weelink.core.utils.paths import DATA_DIR
 
-
-
-WEELINK_CONFIG_PATH: Path = Path.cwd() / "data" / "config.json"
+WEELINK_CONFIG_PATH: Path = DATA_DIR / "config.json"
+WEELINK_CONFIG_SCHEME_PATH: Path = Path(__file__).parent / "scheme.json"
 
 class WeelinkConfig(dict):
 
     def __init__(
         self,
-        config_path: str = WEELINK_CONFIG_PATH,
-        default_config: dict = DEFAULT_CONFIG,
+        config_path = WEELINK_CONFIG_PATH,
+        default_config = DEFAULT_CONFIG,
     ):
         if not WEELINK_CONFIG_PATH.exists():
             # 不存在测创建文件夹并且写入默认配置
@@ -22,7 +22,10 @@ class WeelinkConfig(dict):
             WEELINK_CONFIG_PATH.touch()
             with open(WEELINK_CONFIG_PATH, "w") as f:
                 json.dump(default_config, f, indent=4, ensure_ascii=False)
-
+        
+        with open(WEELINK_CONFIG_SCHEME_PATH, "r", encoding="utf-8") as f:
+            self.scheme = json.loads(f.read())
+        
         with open(WEELINK_CONFIG_PATH, "r") as f:
             conf = json.loads(f.read())
         
@@ -42,7 +45,6 @@ class WeelinkConfig(dict):
             self.save()
         except:
             raise Exception(f"Key: '{key}' 不存在")
-    
     
     def save(self):
         if not WEELINK_CONFIG_PATH.exists():

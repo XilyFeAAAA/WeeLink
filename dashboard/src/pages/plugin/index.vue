@@ -1,16 +1,5 @@
 <template>
     <div class="plugin-container view">
-        <div class="plugin-header">
-            <div class="plugin-title">
-                <div class="title-icon">
-                    <ExtensionFilledIcon size="40" />
-                </div>
-                <div>
-                    <h1>已安装插件</h1>
-                    <p>管理已安装的全部插件</p>
-                </div>
-            </div>
-        </div>
         <div class="plugin-tool">
             <div class="search-bar">
                 <SearchIcon />
@@ -224,7 +213,6 @@ onMounted(async () => {
 .plugin-tool {
     display: flex;
     align-items: center;
-    margin-top: 24px;
 
     .search-bar {
         flex: 1;

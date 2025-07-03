@@ -9,6 +9,8 @@ from .plugin import router as plugin_router
 from .stream import router as stream_router
 from .system import router as system_router
 from .database import router as db_router
+from .config import router as config_router
+
 
 api_router = APIRouter()
 api_router.include_router(auth_router, prefix="/auth", tags=["auth"])
@@ -18,3 +20,4 @@ api_router.include_router(plugin_router, prefix="/plugin", tags=["plugin"])
 api_router.include_router(stream_router, prefix="/stream", tags=["stream"])
 api_router.include_router(system_router, prefix="/system", tags=["system"])
 api_router.include_router(db_router, prefix="/db", tags=["db"])
+api_router.include_router(config_router, prefix="/config", tags=["config"])

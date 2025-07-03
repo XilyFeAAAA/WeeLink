@@ -51,8 +51,8 @@ class Dashboard:
             )
         )
         try:
-            logger.info("WeeLink WebUI 已启动, 可访问")
-            logger.info(f"➜  http://{conf['DASHBOARD_HOST']}:{conf['DASHBOARD_PORT']}")
+            logger.info(f"WeeLink WebUI 已启动, 可访问 ➜  http://{conf['DASHBOARD_HOST']}:{conf['DASHBOARD_PORT']}")
+            logger.info(f"WeeLink WebUI 接口文档可访问 ➜  http://{conf['DASHBOARD_HOST']}:{conf['DASHBOARD_PORT']}/docs")
             await self.server.serve()
         except asyncio.CancelledError:
             print("WeeLink WebUI已关闭")

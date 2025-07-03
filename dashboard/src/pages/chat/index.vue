@@ -1,16 +1,5 @@
 <template>
     <div class="chat-container view">
-        <div class="chat-header">
-            <div class="chat-title">
-                <div class="title-icon">
-                    <ChatMessageFilledIcon size="40"/>
-                </div>
-                <div>
-                    <h1>会话</h1>
-                    <p>管理不同账户，连接到不同的适配器</p>
-                </div>
-            </div>
-        </div>
         <div class="chat-tool">
             <div class="search-bar">
                 <SearchIcon />
@@ -264,7 +253,6 @@ onMounted(async () => {
 .chat-tool {
     display: flex;
     align-items: center;
-    margin-top: 24px;
     .search-bar {
         flex: 1;
         display: flex;

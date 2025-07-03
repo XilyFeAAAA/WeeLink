@@ -19,16 +19,24 @@ DEFAULT_CONFIG = {
     "DASHBOARD_LOGLEVEL": "info",
     # Fastapi
     "BACKEND_CORS_CREDENTIALS": True,
-    "BACKEND_CORS_ORIGINS": [
-        "http://localhost:5173"
-    ],
-    "BACKEND_CORS_METHODS": [
-        "*"
-    ],
-    "BACKEND_CORS_HEADERS": [
-        "*"
+    "BACKEND_CORS_ORIGINS": ["http://localhost:5173"],
+    "BACKEND_CORS_METHODS": ["*"],
+    "BACKEND_CORS_HEADERS": ["*"],
+    # System
+    "SCHEME_KEYS": [
+        "REDIS_HOST",
+        "REDIS_PORT",
+        "REDIS_PASSWORD",
+        "REDIS_DB",
+        "MONGO_URI",
+        "MONGO_DB_NAME",
+        "DASHBOARD_HOST",
+        "DASHBOARD_PORT",
+        "DASHBOARD_USERNAME",
+        "DASHBOARD_PASSWORD",
+        "DASHBOARD_LOGLEVEL"
     ],
     # Internal
     "inactive_plugins": [],
-    "inactive_middlewares": []
+    "inactive_middlewares": [],
 }

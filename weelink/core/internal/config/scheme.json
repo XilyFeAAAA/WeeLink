@@ -1,0 +1,81 @@
+[
+    {
+        "title": "系统配置",
+        "desc": "system_config",
+        "items": [
+            {
+                "label": "Redis 主机地址",
+                "key": "REDIS_HOST",
+                "type": "input",
+                "default": "127.0.0.1",
+                "desc": "Redis 服务器主机地址。"
+            },
+            {
+                "label": "Redis 端口",
+                "key": "REDIS_PORT",
+                "type": "input",
+                "default": 6379,
+                "desc": "Redis 服务器端口号。"
+            },
+            {
+                "label": "Redis 密码",
+                "key": "REDIS_PASSWORD",
+                "type": "input",
+                "default": "",
+                "desc": "Redis 服务器密码（如无可留空）。"
+            },
+            {
+                "label": "Redis 数据库编号",
+                "key": "REDIS_DB",
+                "type": "input",
+                "default": 0,
+                "desc": "Redis 数据库编号。"
+            },
+            {
+                "label": "MongoDB 连接 URI",
+                "key": "MONGO_URI",
+                "type": "input",
+                "default": "mongodb://localhost:27017",
+                "desc": "MongoDB 连接字符串。"
+            },
+            {
+                "label": "MongoDB 数据库名",
+                "key": "MONGO_DB_NAME",
+                "type": "input",
+                "default": "WeeLink",
+                "desc": "MongoDB 数据库名称。"
+            },
+            {
+                "label": "WebUI IP地址",
+                "key": "DASHBOARD_HOST",
+                "type": "input",
+                "default": "127.0.0.1",
+                "desc": "前端仪表盘UI界面的IP地址。"
+            },
+            {
+                "label": "WebUI 端口",
+                "key": "DASHBOARD_PORT",
+                "type": "input",
+                "default": 7070,
+                "desc": "前端仪表盘UI界面的端口。"
+            },
+            {
+                "label": "WebUI 日志等级",
+                "key": "DASHBOARD_LOGLEVEL",
+                "type": "select",
+                "default": "info",
+                "desc": "前端仪表盘UI日志输出等级。",
+                "options": [
+                    {
+                        "label": "debug",
+                        "value": "debug"
+                    },
+                    {
+                        "label": "info",
+                        "value": "info"
+                    }                    
+                ]
+            }
+        ]
+    }
+]
